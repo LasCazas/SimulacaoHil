@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="SimulacaoComG29_ComOPCEEsp/images/logo.png" width="230" alt="IF Betim Racing Logo"/>
+  <a href="#visão-geral">
+    <img src="SimulacaoComG29_ComOPCEEsp/images/logo.png" width="230" alt="IF Betim Racing Logo"/>
+  </a>
 </p>
 
 <h1 align="center">Simulador Dinâmico HIL — Speeduino 48-Way</h1>
@@ -10,10 +12,21 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/ECU-Speeduino_48--Way-d32f2f?style=for-the-badge" alt="Speeduino"/>
-  <img src="https://img.shields.io/badge/Planta_HIL-ESP32_DevKit_V1-00796b?style=for-the-badge&logo=espressif&logoColor=white" alt="ESP32"/>
-  <img src="https://img.shields.io/badge/Interface-Python_%7C_Tkinter-1976d2?style=for-the-badge&logo=python&logoColor=white" alt="Python"/>
-  <img src="https://img.shields.io/badge/Motor-KTM_Duke_390_(22--2)-ff6f00?style=for-the-badge" alt="KTM Duke 390"/>
+  <a href="https://drive.google.com/drive/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0">
+    <img src="https://img.shields.io/badge/Mapa_ECU-Speeduino_48--Way-d32f2f?style=for-the-badge" alt="Mapa Base Speeduino"/>
+  </a>
+  <a href="./HIL_Esp/HIL_Esp.ino">
+    <img src="https://img.shields.io/badge/Planta_HIL-ESP32_DevKit_V1-00796b?style=for-the-badge&logo=espressif&logoColor=white" alt="Codigo ESP32"/>
+  </a>
+  <a href="./interface_g29.py">
+    <img src="https://img.shields.io/badge/Interface-Python_%7C_Tkinter-1976d2?style=for-the-badge&logo=python&logoColor=white" alt="Interface Python"/>
+  </a>
+  <a href="./moto_duke390.json">
+    <img src="https://img.shields.io/badge/Motor-KTM_Duke_390_(22--2)-ff6f00?style=for-the-badge" alt="Parametros KTM Duke 390"/>
+  </a>
+  <a href="./SimulacaoComG29_ComOPCEEsp.pdf">
+    <img src="https://img.shields.io/badge/Docs-PDF_Completo-6a1b9a?style=for-the-badge" alt="Documentacao PDF"/>
+  </a>
 </p>
 
 ---
@@ -36,7 +49,7 @@ O sistema permite validar mapas de injeção/ignição, estratégias de partida,
 | Recurso | Acesso |
 |---|---|
 | **Documentação Técnica Completa (PDF)** | [**`SimulacaoComG29_ComOPCEEsp.pdf`**](./SimulacaoComG29_ComOPCEEsp.pdf) *(fontes LaTeX em [`SimulacaoComG29_ComOPCEEsp/`](./SimulacaoComG29_ComOPCEEsp/))* |
-| **Mapa Base Oficial (`.msq`) e Configurações do TunerStudio** | [**Acessar Pasta Oficial no Google Drive**](https://drive.google.com/drive/u/1/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0) |
+| **Mapa Base Oficial (`.msq`) e Configurações do TunerStudio** | [**Acessar Pasta Oficial no Google Drive**](https://drive.google.com/drive/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0) |
 
 > **Importante:** O arquivo `.msq` disponível no Google Drive já entrega toda a configuração base da **Speeduino 48-Way** pronta para a bancada (decodificador de roda fônica `22-2`, portas de entrada/saída, calibração inicial de sensores e tabelas base de VE e avanço).
 
@@ -45,7 +58,9 @@ O sistema permite validar mapas de injeção/ignição, estratégias de partida,
 ## Arquitetura do Sistema HIL
 
 <p align="center">
-  <img src="SimulacaoComG29_ComOPCEEsp/images/diagrama_hil.png" width="95%" alt="Diagrama de Blocos HIL"/>
+  <a href="./SimulacaoComG29_ComOPCEEsp/images/diagrama_hil.png">
+    <img src="SimulacaoComG29_ComOPCEEsp/images/diagrama_hil.png" width="95%" alt="Diagrama de Blocos HIL"/>
+  </a>
 </p>
 
 1. **Interface Humana (PC — Python/Tkinter @ 30 Hz):** lê o Logitech G29 via `pygame` *ou* os sliders manuais de `0%` a `100%`, transmite comandos à razão de `115200 bps` pela porta COM e exibe o painel de telemetria em tempo real (`RPM`, `km/h`, `VSS Hz`, `Torque Nm`, `MAP kPa`, `Pulso de Injeção µs`, `Fator de Combustível` e `Ignição`).
@@ -74,7 +89,9 @@ Para preservar os dois conversores analógicos internos de 8 bits do ESP32 (`GPI
 ### Condicionamento sem Bico e sem Bobina Físicos (Level Converter)
 
 <p align="center">
-  <img src="SimulacaoComG29_ComOPCEEsp/images/level_Converter.jpg" width="300" alt="Conversor de Nivel Logico Bidirecional"/>
+  <a href="./SimulacaoComG29_ComOPCEEsp.pdf">
+    <img src="SimulacaoComG29_ComOPCEEsp/images/level_Converter.jpg" width="300" alt="Conversor de Nivel Logico Bidirecional"/>
+  </a>
 </p>
 
 Como na bancada HIL **não conectamos bico injetor nem bobina de ignição reais**, não existem cargas indutivas nem surtos de alta tensão (*flyback*). Assim, um **Módulo Conversor de Nível Lógico Bidirecional** (MOSFET BSS138 com resistores de *pull-up* de $10\text{ k}\Omega$ integrados) realiza toda a leitura de retorno com total segurança para o ESP32 ($3{,}3\text{ V}$):
@@ -108,7 +125,7 @@ SimulacaoHil/
 ## Como Reproduzir Passo a Passo
 
 ### 1. Carregar o Mapa Base na Speeduino
-1. Baixe o arquivo `.msq` na [pasta oficial do Google Drive](https://drive.google.com/drive/u/1/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0) e abra no **TunerStudio**.
+1. Baixe o arquivo `.msq` na [pasta oficial do Google Drive](https://drive.google.com/drive/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0) e abra no **TunerStudio**.
 2. Como os DACs nativos do ESP32 excursionam de `0 V` a `3,3 V`, faça a calibração rápida de **TPS** no TunerStudio (*Tools $\rightarrow$ Calibrate TPS*) usando `0%` e `100%` pela própria interface Python.
 
 ### 2. Gravar o ESP32 DevKit V1
@@ -137,7 +154,9 @@ python interface_g29.py
 ---
 
 <p align="center">
-  <img src="SimulacaoComG29_ComOPCEEsp/images/logoToRodaPe.png" height="48" alt="IFMG"/>
+  <a href="#simulador-dinâmico-hil--speeduino-48-way">
+    <img src="SimulacaoComG29_ComOPCEEsp/images/logoToRodaPe.png" height="48" alt="IFMG"/>
+  </a>
   <br/>
   <sub>Desenvolvido por <b>William Las-Cazas Queiroz</b> — Capitão e Gerente Técnico (Equipe Elétrica · IF Betim Racing)</sub>
 </p>

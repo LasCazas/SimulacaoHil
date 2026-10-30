@@ -119,8 +119,8 @@ Todo o código-fonte do firmware do ESP32, a interface gráfica em Python, o arq
     \item \textbf{Repositório GitHub (Firmware ESP32, Interface Tkinter e Parâmetros):} \\
     \url{https://github.com/LasCazas/SimulacaoHil.git}
     \item \textbf{Mapa Base da ECU e Configurações do TunerStudio (Google Drive):} \\
-    \href{https://drive.google.com/drive/u/1/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0}{Clique aqui para acessar a pasta do Mapa Base no Google Drive} \\
-    {\footnotesize (\url{https://drive.google.com/drive/u/1/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0})}
+    \href{https://drive.google.com/drive/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0}{Clique aqui para acessar a pasta do Mapa Base no Google Drive} \\
+    {\footnotesize (\url{https://drive.google.com/drive/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0})}
 \end{itemize}
 \vspace{2pt}
 \footnotesize\textit{Importante:} O arquivo \texttt{.msq} hospedado no Google Drive já contém toda a configuração base da Speeduino 48-Way (decodificador de roda fônica 22-2, mapeamento de portas, calibração de sensores e tabelas iniciais de VE e ignição).
@@ -327,7 +327,7 @@ ESP32 $\rightarrow$ PC ($20\text{ Hz}$) & \texttt{rpm,vss,inj,ign,gr,kmh,tq,map,
 
 \begin{enumerate}[itemsep=4pt]
     \item \textbf{Configurar a ECU Speeduino no TunerStudio:}
-    Baixe o projeto/mapa base (\texttt{.msq}) na pasta do \href{https://drive.google.com/drive/u/1/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0}{Google Drive} e carregue-o na Speeduino 48-Way pelo TunerStudio. Como os DACs nativos do ESP32 operam até $3{,}3\text{ V}$ (e não $5{,}0\text{ V}$), realize a calibração de fim de escala do \textbf{TPS} no TunerStudio pisando $0\%$ e $100\%$ no pedal com o ESP32 conectado, e garanta que a faixa do sensor MAP e a vazão de bico coincidam com os valores de \texttt{moto\_duke390.json}.
+    Baixe o projeto/mapa base (\texttt{.msq}) na pasta do \href{https://drive.google.com/drive/folders/1bbK6THQXaumvtmB5yQu2AqLAyRcFz2Z0}{Google Drive} e carregue-o na Speeduino 48-Way pelo TunerStudio. Como os DACs nativos do ESP32 operam até $3{,}3\text{ V}$ (e não $5{,}0\text{ V}$), realize a calibração de fim de escala do \textbf{TPS} no TunerStudio pisando $0\%$ e $100\%$ no pedal com o ESP32 conectado, e garanta que a faixa do sensor MAP e a vazão de bico coincidam com os valores de \texttt{moto\_duke390.json}.
     \item \textbf{Gravar o Firmware no ESP32 DevKit V1:}
     Abra \texttt{HIL\_Esp/HIL\_Esp.ino} na Arduino IDE (com o pacote oficial \textit{esp32 by Espressif Systems} instalado), selecione a placa \textbf{ESP32 Dev Module} e faça o upload via USB.
     \item \textbf{Montar as Conexões de Bancada:}
