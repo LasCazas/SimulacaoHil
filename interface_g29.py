@@ -24,7 +24,14 @@ SEND_HZ = 30
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 MOTO_FILE = os.path.join(BASE_DIR, "moto_duke390.json")
 CONFIG_FILE = os.path.join(BASE_DIR, "config_g29.json")
+LOGO_FILE = os.path.join(BASE_DIR, "SimulacaoComG29_ComOPCEEsp", "images", "logo.png")
 CONTROLS = ["volante", "acelerador", "freio", "embreagem"]
+
+# Paleta visual IF Betim Racing
+GREEN_RACING = "#157a34"
+RED_RACING = "#d32f2f"
+BG_APP = "#f4f6f5"
+BG_DARK = "#161b1e"
 
 
 def axis_to_pct(v, invert):
@@ -40,9 +47,10 @@ def gear_label(g):
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("HIL Simulador Dinâmico — G29 / Manual -> ESP32")
-        self.geometry("620x650")
-        self.minsize(590, 620)
+        self.title("IF Betim Racing — Simulador Dinâmico HIL")
+        self.geometry("650x730")
+        self.minsize(620, 700)
+        self.configure(bg=BG_APP)
 
         pygame.init()
         pygame.joystick.init()
@@ -58,59 +66,118 @@ class App(tk.Tk):
         self.manual_vars = {}
         self.pct_labels = {}
         self.gear_btns = {}
+        self.logo_icon = None
+        self.logo_header = None
 
         self.cfg = self._load_cfg()
         self.mode_var = tk.StringVar(value=self.cfg.get("mode", "g29"))
 
+        self._setup_style()
+        self._load_logo()
         self._build()
         self._update_mode_ui()
         self.protocol("WM_DELETE_WINDOW", self._on_close)
         self.after(100, self._tick)
 
+    def _setup_style(self):
+        st = ttk.Style(self)
+        if "clam" in st.theme_names():
+            st.theme_use("clam")
+        st.configure(".", background=BG_APP, font=("Segoe UI", 9))
+        st.configure("TFrame", background=BG_APP)
+        st.configure("TLabel", background=BG_APP, foreground="#1e2428")
+        st.configure("TLabelframe", background=BG_APP, bordercolor="#cfd8dc")
+        st.configure("TLabelframe.Label", background=BG_APP, foreground=GREEN_RACING, font=("Segoe UI", 9, "bold"))
+        st.configure("TRadiobutton", background=BG_APP, font=("Segoe UI", 9))
+        st.configure("TCheckbutton", background=BG_APP)
+        st.configure("Accent.TButton", background=GREEN_RACING, foreground="white", font=("Segoe UI", 9, "bold"))
+        st.map("Accent.TButton", background=[("active", "#106229")])
+        st.configure("Pedal.Horizontal.TProgressbar", troughcolor="#e0e5e2", background=GREEN_RACING, thickness=14)
+        st.configure("Rpm.Horizontal.TProgressbar", troughcolor="#263238", background=GREEN_RACING, thickness=18)
+        st.configure("Redline.Horizontal.TProgressbar", troughcolor="#263238", background=RED_RACING, thickness=18)
+
+    def _load_logo(self):
+        if os.path.exists(LOGO_FILE):
+            try:
+                self.logo_icon = tk.PhotoImage(file=LOGO_FILE)
+                self.iconphoto(True, self.logo_icon)
+                self.logo_header = self.logo_icon.subsample(4, 4)  # ~78x56 px
+            except Exception:
+                self.logo_header = None
+
     # ---------- UI ----------
     def _build(self):
-        # Barra superior: conexao Serial + status G29
+        # --- Cabecalho Branco com Logo da Equipe ---
+        header = tk.Frame(self, bg="#ffffff", padx=14, pady=8)
+        header.pack(fill="x")
+        if self.logo_header:
+            tk.Label(header, image=self.logo_header, bg="#ffffff").pack(side="left", padx=(0, 12))
+        title_box = tk.Frame(header, bg="#ffffff")
+        title_box.pack(side="left", fill="y")
+        tk.Label(
+            title_box,
+            text="IF BETIM RACING — SIMULADOR HIL",
+            bg="#ffffff",
+            fg=GREEN_RACING,
+            font=("Segoe UI", 14, "bold"),
+        ).pack(anchor="w")
+        tk.Label(
+            title_box,
+            text="Speeduino 48-Way  ·  KTM Duke 390 (22-2)  ·  ESP32 DevKit V1",
+            bg="#ffffff",
+            fg="#546e7a",
+            font=("Segoe UI", 9),
+        ).pack(anchor="w")
+        self.lbl_js = tk.Label(
+            header, text="G29: não detectado", bg="#eef3f0", fg="#37474f", font=("Segoe UI", 8, "bold"), padx=8, pady=4
+        )
+        self.lbl_js.pack(side="right")
+
+        # Faixa divisoria nas cores da equipe
+        tk.Frame(self, bg=GREEN_RACING, height=3).pack(fill="x")
+
+        # --- Barra de Conexao Serial + Modo ---
         top = ttk.Frame(self)
-        top.pack(fill="x", padx=10, pady=(8, 4))
-        ttk.Label(top, text="Porta COM:").pack(side="left")
+        top.pack(fill="x", padx=12, pady=(8, 4))
+        ttk.Label(top, text="Porta COM:", font=("Segoe UI", 9, "bold")).pack(side="left")
         self.port = ttk.Combobox(top, width=10, values=self._ports())
         self.port.set(self.cfg.get("port", ""))
-        self.port.pack(side="left", padx=4)
+        self.port.pack(side="left", padx=5)
         ttk.Button(top, text="↻", width=3, command=lambda: self.port.config(values=self._ports())).pack(side="left")
-        self.btn_con = ttk.Button(top, text="Conectar", command=self._toggle_serial)
-        self.btn_con.pack(side="left", padx=6)
-        self.lbl_js = ttk.Label(top, text="G29: não detectado")
-        self.lbl_js.pack(side="right")
+        self.btn_con = ttk.Button(top, text="Conectar", style="Accent.TButton", command=self._toggle_serial)
+        self.btn_con.pack(side="left", padx=8)
 
         # Seletor de Modo: Volante G29 vs. Simulado (Sliders)
         mode_box = ttk.LabelFrame(self, text="Modo de Controle")
-        mode_box.pack(fill="x", padx=10, pady=4)
+        mode_box.pack(fill="x", padx=12, pady=4)
         ttk.Radiobutton(
             mode_box,
             text="Volante Real (Logitech G29)",
             value="g29",
             variable=self.mode_var,
             command=self._update_mode_ui,
-        ).pack(side="left", padx=12, pady=4)
+        ).pack(side="left", padx=14, pady=4)
         ttk.Radiobutton(
             mode_box,
             text="Simulado na Interface (Barrinhas % / Manual)",
             value="manual",
             variable=self.mode_var,
             command=self._update_mode_ui,
-        ).pack(side="left", padx=12, pady=4)
+        ).pack(side="left", padx=14, pady=4)
 
         # Container que alterna entre os controles do G29 e os Sliders manuais
         self.input_container = ttk.Frame(self)
-        self.input_container.pack(fill="x", padx=10, pady=4)
+        self.input_container.pack(fill="x", padx=12, pady=4)
 
         # --- Painel 1: Logitech G29 ---
         self.box_g29 = ttk.LabelFrame(self.input_container, text="Entradas do Logitech G29 (enviadas ao ESP32)")
         self.bars = {}
         for i, name in enumerate(CONTROLS):
-            ttk.Label(self.box_g29, text=name.capitalize(), width=11).grid(row=i, column=0, sticky="w", padx=(6, 2))
-            pb = ttk.Progressbar(self.box_g29, length=230, maximum=100)
-            pb.grid(row=i, column=1, padx=4, pady=3)
+            ttk.Label(self.box_g29, text=name.capitalize(), width=11, font=("Segoe UI", 9, "bold")).grid(
+                row=i, column=0, sticky="w", padx=(8, 2)
+            )
+            pb = ttk.Progressbar(self.box_g29, length=250, maximum=100, style="Pedal.Horizontal.TProgressbar")
+            pb.grid(row=i, column=1, padx=4, pady=4)
             self.bars[name] = pb
             lbl_p = ttk.Label(self.box_g29, text="  0%", width=5, font=("Consolas", 9, "bold"))
             lbl_p.grid(row=i, column=2, padx=2)
@@ -121,12 +188,12 @@ class App(tk.Tk):
             ttk.Spinbox(self.box_g29, from_=0, to=9, width=3, textvariable=v).grid(row=i, column=4)
             inv = tk.BooleanVar(value=self.cfg.get("invert", {}).get(name, True))
             self.inv_vars[name] = inv
-            ttk.Checkbutton(self.box_g29, text="inv", variable=inv).grid(row=i, column=5, padx=(4, 6))
+            ttk.Checkbutton(self.box_g29, text="inv", variable=inv).grid(row=i, column=5, padx=(4, 8))
 
-        self.lbl_raw = ttk.Label(self.box_g29, text="eixos brutos: -", font=("Consolas", 8))
-        self.lbl_raw.grid(row=5, column=0, columnspan=6, sticky="w", padx=6, pady=(4, 0))
-        self.lbl_btn = ttk.Label(self.box_g29, text="botoes: -", font=("Consolas", 8))
-        self.lbl_btn.grid(row=6, column=0, columnspan=6, sticky="w", padx=6, pady=(0, 4))
+        self.lbl_raw = ttk.Label(self.box_g29, text="eixos brutos: -", font=("Consolas", 8), foreground="#546e7a")
+        self.lbl_raw.grid(row=5, column=0, columnspan=6, sticky="w", padx=8, pady=(4, 0))
+        self.lbl_btn = ttk.Label(self.box_g29, text="botoes: -", font=("Consolas", 8), foreground="#546e7a")
+        self.lbl_btn.grid(row=6, column=0, columnspan=6, sticky="w", padx=8, pady=(0, 6))
 
         # --- Painel 2: Modo Simulado / Manual (Sliders) ---
         self.box_manual = ttk.LabelFrame(
@@ -136,13 +203,15 @@ class App(tk.Tk):
             default_val = 50.0 if name == "volante" else 0.0
             mv = tk.DoubleVar(value=default_val)
             self.manual_vars[name] = mv
-            ttk.Label(self.box_manual, text=name.capitalize(), width=11).grid(row=i, column=0, sticky="w", padx=(6, 2))
+            ttk.Label(self.box_manual, text=name.capitalize(), width=11, font=("Segoe UI", 9, "bold")).grid(
+                row=i, column=0, sticky="w", padx=(8, 2)
+            )
             sc = ttk.Scale(
                 self.box_manual,
                 from_=0.0,
                 to=100.0,
                 orient="horizontal",
-                length=280,
+                length=310,
                 variable=mv,
                 command=lambda _val, n=name: self._round_manual(n),
             )
@@ -157,18 +226,20 @@ class App(tk.Tk):
                 command=lambda n=name: self._round_manual(n),
             )
             sp.grid(row=i, column=2, padx=4)
-            ttk.Label(self.box_manual, text="%").grid(row=i, column=3, sticky="w", padx=(0, 6))
+            ttk.Label(self.box_manual, text="%").grid(row=i, column=3, sticky="w", padx=(0, 8))
 
         # Seletor de marchas clicavel + botao de zerar pedais no modo manual
         gear_row = ttk.Frame(self.box_manual)
-        gear_row.grid(row=5, column=0, columnspan=4, sticky="ew", padx=6, pady=(6, 6))
-        ttk.Label(gear_row, text="Marcha:").pack(side="left", padx=(0, 6))
+        gear_row.grid(row=5, column=0, columnspan=4, sticky="ew", padx=8, pady=(6, 8))
+        ttk.Label(gear_row, text="Marcha:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(0, 6))
         for g_code, g_txt in [(7, "R"), (0, "N"), (1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5"), (6, "6")]:
             b = tk.Button(
                 gear_row,
                 text=g_txt,
                 width=3,
-                relief="raised",
+                relief="flat",
+                bd=1,
+                cursor="hand2",
                 command=lambda g=g_code: self._set_manual_gear(g),
             )
             b.pack(side="left", padx=2)
@@ -176,26 +247,49 @@ class App(tk.Tk):
         ttk.Button(gear_row, text="Zerar Pedais", command=self._zero_pedals).pack(side="right", padx=4)
         self._highlight_gear_btns()
 
-        # Indicador central de Marcha + pacote TX
-        self.lbl_gear = ttk.Label(self, text="Marcha: N", font=("Arial", 20, "bold"))
-        self.lbl_gear.pack(pady=(4, 2))
-        self.lbl_send = ttk.Label(self, text="TX: -", font=("Consolas", 10))
-        self.lbl_send.pack()
+        # --- Visor Estilo Cockpit (Marcha + RPM + Telemetria) ---
+        dash = tk.Frame(self, bg=BG_DARK, padx=14, pady=10, highlightthickness=1, highlightbackground="#cfd8dc")
+        dash.pack(fill="x", padx=12, pady=6)
 
-        # Telemetria recebida do ESP32
-        fb = ttk.LabelFrame(self, text="Telemetria da Planta HIL (ESP32)")
-        fb.pack(fill="x", padx=10, pady=6)
-        self.lbl_rpm = ttk.Label(fb, text="0 RPM", font=("Arial", 26, "bold"))
-        self.lbl_rpm.pack(pady=(2, 0))
-        self.pb_rpm = ttk.Progressbar(fb, length=540, maximum=11500)
-        self.pb_rpm.pack(padx=10, pady=4)
-        self.lbl_fb = ttk.Label(fb, text="-", font=("Consolas", 10), justify="center")
-        self.lbl_fb.pack(pady=4)
+        dash_top = tk.Frame(dash, bg=BG_DARK)
+        dash_top.pack(fill="x")
 
-        # Rodape de status + reenviar JSON
+        # Caixa de marcha estilo Gear Indicator
+        gear_card = tk.Frame(dash_top, bg="#222a2e", padx=16, pady=4)
+        gear_card.pack(side="left", padx=(0, 14))
+        tk.Label(gear_card, text="GEAR", bg="#222a2e", fg="#90a4ae", font=("Segoe UI", 8, "bold")).pack()
+        self.lbl_gear = tk.Label(gear_card, text="N", bg="#222a2e", fg="#4caf50", font=("Consolas", 28, "bold"))
+        self.lbl_gear.pack()
+
+        # Bloco central de RPM + Barra
+        rpm_card = tk.Frame(dash_top, bg=BG_DARK)
+        rpm_card.pack(side="left", fill="x", expand=True)
+        rpm_head = tk.Frame(rpm_card, bg=BG_DARK)
+        rpm_head.pack(fill="x")
+        self.lbl_rpm = tk.Label(rpm_head, text="0 RPM", bg=BG_DARK, fg="#ffffff", font=("Consolas", 24, "bold"))
+        self.lbl_rpm.pack(side="left")
+        self.lbl_mode_tag = tk.Label(
+            rpm_head, text="MODO: G29", bg="#263238", fg="#80cbc4", font=("Consolas", 9, "bold"), padx=6, pady=2
+        )
+        self.lbl_mode_tag.pack(side="right", pady=6)
+
+        self.pb_rpm = ttk.Progressbar(rpm_card, length=460, maximum=11500, style="Rpm.Horizontal.TProgressbar")
+        self.pb_rpm.pack(fill="x", pady=(4, 2))
+
+        self.lbl_send = tk.Label(dash, text="TX: -", bg=BG_DARK, fg="#90a4ae", font=("Consolas", 9))
+        self.lbl_send.pack(anchor="w", pady=(6, 2))
+
+        tk.Frame(dash, bg="#263238", height=1).pack(fill="x", pady=4)
+
+        self.lbl_fb = tk.Label(
+            dash, text="Aguardando telemetria do ESP32...", bg=BG_DARK, fg="#e0f2f1", font=("Consolas", 9), justify="left"
+        )
+        self.lbl_fb.pack(anchor="w")
+
+        # --- Rodape de Status + Reenviar JSON ---
         bottom = ttk.Frame(self)
-        bottom.pack(fill="x", padx=10, pady=(2, 8))
-        self.lbl_status = ttk.Label(bottom, text="Desconectado")
+        bottom.pack(fill="x", padx=12, pady=(4, 8))
+        self.lbl_status = ttk.Label(bottom, text="Desconectado", foreground="#546e7a")
         self.lbl_status.pack(side="left")
         ttk.Button(bottom, text="Reenviar parâmetros (moto_duke390.json)", command=self._queue_params).pack(
             side="right"
@@ -216,9 +310,9 @@ class App(tk.Tk):
         for g_code, btn in self.gear_btns.items():
             active = g_code == self.manual_gear
             btn.config(
-                bg="#1e88e5" if active else "SystemButtonFace",
-                fg="white" if active else "black",
-                font=("Arial", 9, "bold" if active else "normal"),
+                bg=GREEN_RACING if active else "#e4e9e6",
+                fg="white" if active else "#1e2428",
+                font=("Segoe UI", 9, "bold" if active else "normal"),
             )
 
     def _zero_pedals(self):
@@ -302,10 +396,10 @@ class App(tk.Tk):
         if pygame.joystick.get_count() and self.js is None:
             self.js = pygame.joystick.Joystick(0)
             self.js.init()
-            self.lbl_js.config(text=f"G29: {self.js.get_name()[:28]}")
+            self.lbl_js.config(text=f"G29: {self.js.get_name()[:24]}", bg="#e8f5e9", fg=GREEN_RACING)
         elif not pygame.joystick.get_count() and self.js is not None:
             self.js = None
-            self.lbl_js.config(text="G29: não detectado")
+            self.lbl_js.config(text="G29: não detectado", bg="#eef3f0", fg="#37474f")
 
     def _read_manual_values(self):
         def pct(name):
@@ -328,9 +422,9 @@ class App(tk.Tk):
                 a = var.get()
                 v = raw[a] if a < n else 0.0
                 vals[name] = (
-                    axis_to_pct(v, self.inv_vars[name].get()) if name != "volante" else (1 - v) / 2
-                    if self.inv_vars[name].get()
-                    else (v + 1) / 2
+                    axis_to_pct(v, self.inv_vars[name].get())
+                    if name != "volante"
+                    else ((1 - v) / 2 if self.inv_vars[name].get() else (v + 1) / 2)
                 )
                 pct100 = vals[name] * 100.0
                 self.bars[name]["value"] = pct100
@@ -358,16 +452,19 @@ class App(tk.Tk):
 
         if self.mode_var.get() == "manual":
             thr, clu, brk, gear = self._read_manual_values()
-            mode_tag = "MANUAL"
+            mode_tag = "MODO: SIMULADO"
         else:
             thr, clu, brk, gear = self._read_g29_values()
-            mode_tag = "G29"
+            mode_tag = "MODO: G29 REAL"
 
-        self.lbl_gear.config(text=f"Marcha: {gear_label(gear)}   ({mode_tag})")
+        g_txt = gear_label(gear)
+        g_color = "#ffca28" if g_txt == "N" else (RED_RACING if g_txt == "R" else "#4caf50")
+        self.lbl_gear.config(text=g_txt, fg=g_color)
+        self.lbl_mode_tag.config(text=mode_tag)
 
         pkt = f"{int(round(thr * 255))},{int(round(clu * 255))},{gear},{int(round(brk * 255))}\n"
         self.lbl_send.config(
-            text=f"TX: {pkt.strip()}   |   TPS: {thr*100:4.1f}%   Emb: {clu*100:4.1f}%   Freio: {brk*100:4.1f}%"
+            text=f"TX: {pkt.strip():<14} |  TPS: {thr*100:5.1f}%   Emb: {clu*100:5.1f}%   Freio: {brk*100:5.1f}%"
         )
         if self.ser:
             try:
@@ -393,7 +490,10 @@ class App(tk.Tk):
             p = ln.strip().split(",")
             if len(p) == 10 and all(x.lstrip("-").isdigit() for x in p):
                 r, v, i, g, gr, kmh, tq, mp, ff, fb = map(int, p)
-                self.lbl_rpm.config(text=f"{r} RPM")
+                self.lbl_rpm.config(text=f"{r} RPM", fg="#ff5252" if r >= 9800 else "#ffffff")
+                self.pb_rpm.configure(
+                    style="Redline.Horizontal.TProgressbar" if r >= 9800 else "Rpm.Horizontal.TProgressbar"
+                )
                 self.pb_rpm["value"] = r
                 self.lbl_fb.config(
                     text=(
