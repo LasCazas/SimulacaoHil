@@ -1,0 +1,46 @@
+{
+  "_info": "Parametros da moto simulada (KTM Duke 390, ~373 cc monocilindrico). TODOS os valores sao APROXIMACOES (fontes publicas/estimativa), ajuste conforme a sua moto/medicoes. Cada parametro: valor, unidade (un) e descricao (desc). O PC envia estes valores ao ESP32 ao conectar - nao precisa regravar o ESP. Chaves iniciadas com _ sao ignoradas.",
+  "parametros": {
+    "idle_rpm":            {"valor": 1400,  "un": "rpm",    "desc": "Marcha lenta alvo (assistencia de lenta simula valvula/ECU)"},
+    "rev_limit_rpm":       {"valor": 10500, "un": "rpm",    "desc": "Limitador de giro (corte de combustivel/ignicao)"},
+    "engine_inertia":      {"valor": 0.08,  "un": "kg.m2",  "desc": "Inercia do virabrequim + volante + entrada da embreagem (estimada)"},
+    "displacement_cc":     {"valor": 373,   "un": "cc",     "desc": "Cilindrada (Duke 390 2017-2023: 373 cc; modelo 2024: 399 cc)"},
+    "fric_const_nm":       {"valor": 2.0,   "un": "Nm",     "desc": "Atrito/bombeamento: parcela constante (freio-motor)"},
+    "fric_per_rpm":        {"valor": 0.0012,"un": "Nm/rpm", "desc": "Atrito/bombeamento: parcela proporcional ao RPM"},
+    "idle_gain":           {"valor": 0.03,  "un": "Nm/rpm", "desc": "Ganho da assistencia de marcha lenta"},
+    "idle_max_nm":         {"valor": 8.0,   "un": "Nm",     "desc": "Torque maximo da assistencia de marcha lenta"},
+    "map_idle_kpa":        {"valor": 38,    "un": "kPa",    "desc": "MAP em marcha lenta (borboleta fechada)"},
+    "map_zero_torque_kpa": {"valor": 25,    "un": "kPa",    "desc": "MAP abaixo do qual o torque indicado e ~0 (carga = (MAP-este)/(Patm-este))"},
+    "baro_kpa":            {"valor": 101.3, "un": "kPa",    "desc": "Pressao atmosferica"},
+    "iat_c":               {"valor": 30,    "un": "C",      "desc": "Temperatura do ar de admissao (para densidade)"},
+    "ve":                  {"valor": 0.85,  "un": "-",      "desc": "Eficiencia volumetrica media (usada p/ calcular o pulso de injecao esperado)"},
+    "afr":                 {"valor": 14.7,  "un": "-",      "desc": "Relacao ar/combustivel estequiometrica (gasolina; E27 ~ 14.0)"},
+    "inj_flow_ccmin":      {"valor": 230,   "un": "cc/min", "desc": "Vazao do bico (ESTIMADA - use o valor real e coloque o MESMO no TunerStudio)"},
+    "inj_deadtime_ms":     {"valor": 0.8,   "un": "ms",     "desc": "Tempo morto do bico (coloque o mesmo no TunerStudio)"},
+    "fuel_density":        {"valor": 0.74,  "un": "g/cc",   "desc": "Densidade da gasolina"},
+    "use_inj_feedback":    {"valor": 0,     "un": "0/1",    "desc": "0 = torque em malha aberta (ECU nao influencia). 1 = usa o pulso real do bico lido da ECU: mistura pobre/rica altera torque; sem pulso = corte de combustivel (torque 0)"},
+    "mass_kg":             {"valor": 230,   "un": "kg",     "desc": "Massa moto + piloto (~149 kg a seco + combustivel + ~75 kg)"},
+    "wheel_radius_m":      {"valor": 0.30,  "un": "m",      "desc": "Raio dinamico da roda traseira (150/60-17)"},
+    "wheel_inertia":       {"valor": 1.5,   "un": "kg.m2",  "desc": "Inercia equivalente das rodas (estimada)"},
+    "cda":                 {"valor": 0.36,  "un": "m2",     "desc": "Cd x Area frontal (naked + piloto, estimado)"},
+    "crr":                 {"valor": 0.015, "un": "-",      "desc": "Coeficiente de resistencia ao rolamento"},
+    "brake_max_n":         {"valor": 2200,  "un": "N",      "desc": "Forca de frenagem com freio a fundo (~1 g)"},
+    "primary_ratio":       {"valor": 2.9,   "un": "-",      "desc": "Reducao primaria (estimada)"},
+    "final_ratio":         {"valor": 3.0,   "un": "-",      "desc": "Reducao final (pinhao 15 / coroa 45)"},
+    "reverse_ratio":       {"valor": 2.714, "un": "-",      "desc": "Relacao da re (a moto real NAO tem re; recurso do simulador)"},
+    "clutch_tmax_nm":      {"valor": 70,    "un": "Nm",     "desc": "Torque maximo transmitido pela embreagem (totalmente engatada)"},
+    "clutch_start":        {"valor": 0.2,   "un": "0-1",    "desc": "Curso do pedal ate onde a embreagem ainda esta 100% engatada"},
+    "clutch_end":          {"valor": 0.7,   "un": "0-1",    "desc": "Curso do pedal a partir do qual a embreagem esta 100% solta"},
+    "vss_ppr":             {"valor": 16,    "un": "pulsos/volta", "desc": "Pulsos do sensor de velocidade por volta da roda (ESTIMADO - ajuste ao seu sensor/TunerStudio)"},
+    "map_sensor_min_kpa":  {"valor": 10,    "un": "kPa",    "desc": "Faixa do sensor MAP no TunerStudio: minimo (0 V)"},
+    "map_sensor_max_kpa":  {"valor": 260,   "un": "kPa",    "desc": "Faixa do sensor MAP no TunerStudio: maximo (5 V). DAC do ESP so chega a 3,3 V"}
+  },
+  "relacoes_marcha": {
+    "valor": [2.714, 1.882, 1.409, 1.143, 0.960, 0.840],
+    "desc": "Relacoes do cambio 1a a 6a (aproximadas)"
+  },
+  "curva_torque_wot": {
+    "valor": [[1000, 20], [2000, 24], [3000, 27], [4000, 29], [5000, 31], [6000, 33], [7000, 35], [8000, 35], [9000, 34], [10000, 31], [10500, 28], [11500, 15]],
+    "desc": "Torque indicado a plena carga [rpm, Nm]. Pico ~35 Nm @ 7000 rpm, ~32 kW @ 9000 rpm (dados publicos aproximados). Maximo 16 pontos"
+  }
+}

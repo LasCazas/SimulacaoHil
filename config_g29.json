@@ -1,0 +1,15 @@
+{
+  "port": "COM9",
+  "axes": {
+    "volante": 0,
+    "acelerador": 1,
+    "freio": 2,
+    "embreagem": 3
+  },
+  "invert": {
+    "volante": true,
+    "acelerador": true,
+    "freio": true,
+    "embreagem": true
+  }
+}
