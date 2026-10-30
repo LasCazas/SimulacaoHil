@@ -298,9 +298,9 @@ Para manter a documentação enxuta e sempre sincronizada com as evoluções do 
 
 \begin{itemize}[itemsep=2pt]
     \item \texttt{HIL\_Esp/HIL\_Esp.ino}: Firmware completo do ESP32 DevKit V1 (compatível com os pacotes Arduino-ESP32 \texttt{2.x} e \texttt{3.x}), integrando síntese DMA I2S da roda fônica 22-2, modelo dinâmico da motocicleta, saídas DAC/PWM e ISRs de injeção/ignição.
-    \item \texttt{interface\_g29.py}: Painel gráfico em Python (\texttt{tkinter} + \texttt{pygame} + \texttt{pyserial}) com barras dos pedais/volante, indicador de marcha, leitura de eixos/botões brutos para calibração rápida e mostradores em tempo real da telemetria.
+    \item \texttt{interface\_g29.py}: Painel gráfico em Python (\texttt{tkinter} + \texttt{pygame} + \texttt{pyserial}) com \textbf{dois modos selecionáveis de operação}: \textit{(i)} \textbf{Modo Volante Real (Logitech G29)}, com barras percentuais e leitura bruta de eixos/botões para calibração; e \textit{(ii)} \textbf{Modo Simulado na Interface (Manual)}, com barras deslizantes (\textit{sliders}) e entradas numéricas de $0\%$ a $100\%$ para os pedais e seletor clicável de marchas (\texttt{R}, \texttt{N}, \texttt{1..6}), permitindo operar e calibrar a ECU na bancada mesmo sem o G29 conectado.
     \item \texttt{moto\_duke390.json}: Arquivo de parametrização documentado contendo 33 parâmetros escalares (inércia, cilindrada, vazão do bico, massa, aerodinâmica, embreagem, sensores), vetor de relações de marcha e curva de torque WOT.
-    \item \texttt{config\_g29.json}: Gerado e atualizado automaticamente ao fechar a interface gráfica, salvando a porta COM selecionada, o mapeamento de eixos e as inversões dos pedais.
+    \item \texttt{config\_g29.json}: Gerado e atualizado automaticamente ao fechar a interface gráfica, salvando a porta COM selecionada, o modo de controle ativo (\texttt{g29} ou \texttt{manual}), o mapeamento de eixos e as inversões dos pedais.
     \item \texttt{CodigoEsp/CodigoEsp.ino}: Código base original de bancada (geração isolada da roda fônica 22-2 via potenciômetros), mantido como referência histórica.
 \end{itemize}
 
