@@ -158,5 +158,5 @@ python interface_g29.py
     <img src="SimulacaoComG29_ComOPCEEsp/images/logoToRodaPe.png" height="48" alt="IFMG"/>
   </a>
   <br/>
-  <sub>Desenvolvido por <b>William Las-Cazas Queiroz</b> — Capitão e Gerente Técnico (Equipe Elétrica · IF Betim Racing)</sub>
+  <sub>Desenvolvido por <b>William Las-Cazas Queiroz</b> — Gerente Técnico (Equipe Elétrica · IF Betim Racing)</sub>
 </p>

@@ -26,6 +26,9 @@ build/
 *.bin
 *.hex
 
+# Trabalhos academicos externos ao repo do simulador
+EngenhariaEconomica/
+
 # Sistema
 Thumbs.db
 .DS_Store
