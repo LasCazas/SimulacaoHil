@@ -1,4 +1,4 @@
-﻿"""Interface HIL: le o Logitech G29 (pygame) e envia "throttle,clutch,gear\\n" ao ESP32.
+"""Interface HIL: le o Logitech G29 (pygame) e envia "throttle,clutch,gear\\n" ao ESP32.
 Recebe telemetria "rpm,vss_hz,inj_us,ign_age_ms,gear" do ESP.
 
 pip install pygame pyserial
@@ -14,7 +14,7 @@ import serial
 import serial.tools.list_ports
 
 # ---- Mapeamento padrao do G29 (ajuste pela interface se necessario) ----
-DEFAULT_AXES = {"volante": 0, "acelerador": 2, "freio": 3, "embreagem": 1}
+DEFAULT_AXES = {"volante": 0, "acelerador": 1, "freio": 2, "embreagem": 3}
 # Cambio H (botoes tipicos do G29 no Windows/DirectInput). Ajuste se diferir.
 GEAR_BUTTONS = {12: 1, 13: 2, 14: 3, 15: 4, 16: 5, 17: 6, 18: 7}  # 7 = Re (botao 18; veja "botoes" na UI)
 PADDLE_UP, PADDLE_DOWN = 5, 4  # aletas: usadas se o cambio H nao estiver em marcha

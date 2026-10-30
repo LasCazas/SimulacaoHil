@@ -1,0 +1,32 @@
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Compilacao LaTeX (arquivos auxiliares)
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# Builds Arduino / PlatformIO / IDEs
+.pio/
+.vscode/
+build/
+*.o
+*.elf
+*.bin
+*.hex
+
+# Sistema
+Thumbs.db
+.DS_Store
+desktop.ini
