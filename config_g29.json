@@ -1,5 +1,9 @@
 {
   "port": "COM9",
+  "mode": "g29",
+  "audio_on": true,
+  "audio_profile": "berrador",
+  "audio_volume": 55.0,
   "axes": {
     "volante": 0,
     "acelerador": 1,
