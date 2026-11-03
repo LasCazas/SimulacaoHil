@@ -57,12 +57,13 @@ def gear_label(g):
 
 class App(tk.Tk):
     WHEEL_VIEW_PX = 215
+    AUDIO_DEFAULT_LABEL = "Padrão do Windows"
 
     def __init__(self):
         super().__init__()
         self.title("IF Betim Racing — Simulador Dinâmico HIL")
-        self.geometry("760x785")
-        self.minsize(730, 750)
+        self.geometry("760x830")
+        self.minsize(730, 790)
         self.configure(bg=BG_APP)
 
         pygame.init()
@@ -188,7 +189,7 @@ class App(tk.Tk):
 
         tk.Frame(self, bg=GREEN_RACING, height=3).pack(fill="x")
 
-        # 2) Barra de Conexao Serial + Controle de Audio (Berrador PC)
+        # 2) Barra de Conexao Serial
         top = ttk.Frame(self)
         top.pack(fill="x", padx=12, pady=(7, 3))
         ttk.Label(top, text="Porta COM:", font=("Segoe UI", 9, "bold")).pack(side="left")
@@ -199,31 +200,56 @@ class App(tk.Tk):
         self.btn_con = ttk.Button(top, text="Conectar", style="Accent.TButton", command=self._toggle_serial)
         self.btn_con.pack(side="left", padx=6)
 
-        # Controles de Som no PC (lado direito da barra superior)
-        snd_frame = ttk.Frame(top)
-        snd_frame.pack(side="right")
+        # Controles de Som no PC (linha propria, com barra de volume bem visivel + Mudo)
+        snd_frame = ttk.LabelFrame(self, text="Som do Motor (PC)")
+        snd_frame.pack(fill="x", padx=12, pady=3)
         ttk.Checkbutton(
-            snd_frame, text="Som Motor (PC)", variable=self.audio_on_var, command=self._sync_audio_cfg
-        ).pack(side="left", padx=(0, 6))
+            snd_frame, text="Ativar som", variable=self.audio_on_var, command=self._sync_audio_cfg
+        ).pack(side="left", padx=(8, 6), pady=3)
         cb_prof = ttk.Combobox(
             snd_frame,
-            width=14,
+            width=12,
             state="readonly",
             values=["berrador", "ktm390"],
             textvariable=self.audio_prof_var,
         )
         cb_prof.pack(side="left", padx=3)
         cb_prof.bind("<<ComboboxSelected>>", lambda _e: self._sync_audio_cfg())
-        ttk.Label(snd_frame, text="Vol:").pack(side="left", padx=(6, 2))
+        self.btn_mute = tk.Button(
+            snd_frame,
+            text="🔊",
+            width=3,
+            relief="flat",
+            bg="#e4e9e6",
+            font=("Segoe UI", 9),
+            cursor="hand2",
+            command=self._toggle_mute,
+        )
+        self.btn_mute.pack(side="left", padx=(12, 4))
+        ttk.Label(snd_frame, text="Volume:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(2, 4))
         ttk.Scale(
             snd_frame,
             from_=0,
             to=100,
             orient="horizontal",
-            length=75,
+            length=150,
             variable=self.audio_vol_var,
             command=lambda _v: self._sync_audio_cfg(),
-        ).pack(side="left")
+        ).pack(side="left", fill="x", expand=True, padx=(0, 6))
+        self.lbl_vol = ttk.Label(snd_frame, text="", width=5, font=("Consolas", 9, "bold"))
+        self.lbl_vol.pack(side="left", padx=(0, 8))
+        # Seletor de saida de audio (alto-falante / fone) + recarregar dispositivos
+        ttk.Label(snd_frame, text="Saída:", font=("Segoe UI", 9, "bold")).pack(side="left", padx=(4, 2))
+        self.cb_dev = ttk.Combobox(snd_frame, width=22, state="readonly")
+        self.cb_dev.pack(side="left", padx=2)
+        self.cb_dev.bind("<<ComboboxSelected>>", lambda _e: self._apply_audio_device())
+        ttk.Button(snd_frame, text="↻", width=3, command=self._refresh_audio_devices).pack(
+            side="left", padx=(2, 8)
+        )
+        self._audio_devs = []
+        self._fill_audio_devices(self.cfg.get("audio_device", self.AUDIO_DEFAULT_LABEL))
+        self._vol_before_mute = None
+        self._sync_audio_cfg()
 
         # 3) Seletor de Modo: Volante G29 vs Simulado na Interface
         mode_box = ttk.LabelFrame(self, text="Modo de Controle")
@@ -579,7 +605,45 @@ class App(tk.Tk):
     def _sync_audio_cfg(self):
         self.audio.enabled = bool(self.audio_on_var.get())
         self.audio.profile = self.audio_prof_var.get()
-        self.audio.volume = max(0.0, min(1.0, float(self.audio_vol_var.get()) / 100.0))
+        vol_pct = max(0.0, min(100.0, float(self.audio_vol_var.get())))
+        self.audio.volume = vol_pct / 100.0
+        if hasattr(self, "lbl_vol"):
+            self.lbl_vol.config(text=f"{vol_pct:3.0f}%")
+            self.btn_mute.config(text="🔇" if vol_pct <= 0.5 else "🔊")
+
+    def _fill_audio_devices(self, wanted_label):
+        """Preenche o combo de saidas e abre o stream no dispositivo desejado."""
+        self._audio_devs = EngineAudioPlayer.list_output_devices()
+        labels = [self.AUDIO_DEFAULT_LABEL] + [name for _i, name in self._audio_devs]
+        self.cb_dev.config(values=labels)
+        self.cb_dev.set(wanted_label if wanted_label in labels else self.AUDIO_DEFAULT_LABEL)
+        self._apply_audio_device(reinit=False)
+
+    def _apply_audio_device(self, reinit=True):
+        label = self.cb_dev.get()
+        dev = next((i for i, name in self._audio_devs if name == label), None)
+        if reinit:
+            self.audio.restart(dev)
+        elif dev != self.audio.device:
+            self.audio.stop()
+            self.audio.device = dev
+            self.audio.start()
+
+    def _refresh_audio_devices(self):
+        """Rele os dispositivos do Windows (ex: fone recem plugado) e reabre o audio."""
+        current = self.cb_dev.get()
+        self.audio.restart(None)  # reinicializa a PortAudio p/ enxergar o novo dispositivo
+        self._fill_audio_devices(current)
+
+    def _toggle_mute(self):
+        """Mudo rapido: zera o volume e restaura o valor anterior no segundo clique."""
+        cur = float(self.audio_vol_var.get())
+        if cur > 0.5:
+            self._vol_before_mute = cur
+            self.audio_vol_var.set(0.0)
+        else:
+            self.audio_vol_var.set(self._vol_before_mute or 55.0)
+        self._sync_audio_cfg()
 
     def _set_manual_gear(self, g):
         self.manual_gear = g
@@ -630,6 +694,7 @@ class App(tk.Tk):
             "audio_on": bool(self.audio_on_var.get()),
             "audio_profile": self.audio_prof_var.get(),
             "audio_volume": round(float(self.audio_vol_var.get()), 1),
+            "audio_device": self.cb_dev.get(),
             "axes": {k: v.get() for k, v in self.axis_vars.items()},
             "invert": {k: v.get() for k, v in self.inv_vars.items()},
         }

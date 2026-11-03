@@ -3,7 +3,8 @@
   "mode": "g29",
   "audio_on": true,
   "audio_profile": "berrador",
-  "audio_volume": 55.0,
+  "audio_volume": 32.2,
+  "audio_device": "Fones de ouvido (\u8054\u60f3thinkplus-GM",
   "axes": {
     "volante": 0,
     "acelerador": 1,

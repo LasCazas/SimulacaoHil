@@ -67,6 +67,7 @@ class EngineAudioPlayer:
         self.pop_cooldown = 0.0
 
         self.stream = None
+        self.device = None  # None = saida padrao do Windows
 
     def _load_samples(self):
         for name in ("idle", "mid", "high", "pop"):
@@ -84,6 +85,41 @@ class EngineAudioPlayer:
     def available(self):
         return HAS_AUDIO
 
+    @staticmethod
+    def list_output_devices():
+        """Lista saidas de audio (via MME no Windows, que aceita qualquer sample rate).
+        Retorna lista de (indice, nome)."""
+        if not HAS_AUDIO:
+            return []
+        out = []
+        try:
+            apis = sd.query_hostapis()
+            mme_idx = next((i for i, a in enumerate(apis) if a["name"] == "MME"), None)
+            for i, d in enumerate(sd.query_devices()):
+                if d["max_output_channels"] < 1:
+                    continue
+                if mme_idx is not None and d["hostapi"] != mme_idx:
+                    continue
+                if "Mapeador" in d["name"] or "Mapper" in d["name"]:
+                    continue
+                out.append((i, d["name"]))
+        except Exception:
+            pass
+        return out
+
+    def restart(self, device=None):
+        """Reinicializa a PortAudio (relendo os dispositivos do Windows, ex: fone recem
+        plugado) e reabre o stream no dispositivo escolhido (None = padrao do Windows)."""
+        self.stop()
+        self.device = device
+        if HAS_AUDIO:
+            try:
+                sd._terminate()
+                sd._initialize()
+            except Exception:
+                pass
+        self.start()
+
     def start(self):
         if not HAS_AUDIO or self.stream is not None:
             return
@@ -94,6 +130,7 @@ class EngineAudioPlayer:
                 dtype="float32",
                 blocksize=self.BLOCK_SIZE,
                 callback=self._callback,
+                device=self.device,
             )
             self.stream.start()
         except Exception:
