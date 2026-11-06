@@ -1,12 +1,13 @@
 """Motor de audio em tempo real no PC (inspirado no projeto Berrador).
 Roda 100% no computador via sounddevice + numpy (zero carga no ESP32).
 
-Suporta dois perfis sonoros:
-1) "berrador": usa os samples reais (idle.wav, mid.wav, high.wav, pop.wav) com
-   Pitch Shifting por interpolacao linear, crossfade suave entre faixas,
-   modulacao de carga (TPS) e pipocos (pops & bangs) na desaceleracao.
-2) "ktm390": sintese fisica harmonica de monocilindrico 4 tempos (Duke 390)
-   com corte de giro e pipocos no escapamento.
+Suporta tres perfis sonoros:
+1) "ktm390": sintese fisica de monocilindrico 4 tempos 373cc (KTM Duke 390) "So o Cano",
+   com pulso de choque, ressonancia de cano aberto e pipocos secos.
+2) "hornet": sintese fisica de 4 cilindros em linha 600cc (Honda CB 600F Hornet) 4x1 direto,
+   com uivo estridente agudo em alta rotacao, ronco encorpado na lenta e corte metralhadora.
+3) "berrador": usa os samples reais (idle.wav, mid.wav, high.wav, pop.wav) com
+   Pitch Shifting por interpolacao linear, crossfade suave e modulacao de carga.
 """
 import os
 import random
@@ -43,7 +44,7 @@ class EngineAudioPlayer:
         self.sounds_dir = sounds_dir
         self.enabled = False
         self.volume = 0.55
-        self.profile = "berrador"  # "berrador" ou "ktm390"
+        self.profile = "ktm390"  # "ktm390" (Duke 390 Só o Cano) ou "berrador"
 
         # Estado alvo vindo da UI / ESP32
         self.target_rpm = 1400.0
@@ -61,6 +62,7 @@ class EngineAudioPlayer:
         self.ph_mid = 0.0
         self.ph_high = 0.0
         self.ph_synth = 0.0
+        self.ph_synth_hornet = 0.0
         self.cut_timer = 0.0
         self.pop_pos = -1
         self.pop_gain = 0.0
@@ -151,15 +153,17 @@ class EngineAudioPlayer:
         new_thr = max(0.0, min(1.0, float(throttle_pct)))
 
         # Dispara pipoco (pop) ao tirar o pe rapido em giro medio/alto
+        min_pop_rpm = 3400.0 if self.profile in ("ktm390", "hornet") else 4200.0
+        thr_drop = 0.18 if self.profile in ("ktm390", "hornet") else 0.25
         if (
-            self.prev_throttle > 0.25
-            and new_thr < 0.06
-            and self.smooth_rpm > 4200.0
+            self.prev_throttle > thr_drop
+            and new_thr < 0.07
+            and self.smooth_rpm > min_pop_rpm
             and self.pop_cooldown <= 0.0
         ):
             self.pop_pos = 0
-            self.pop_gain = min(1.0, 0.55 + (self.smooth_rpm - 4200.0) / 8000.0)
-            self.pop_cooldown = 0.35
+            self.pop_gain = min(1.0, 0.65 + (self.smooth_rpm - min_pop_rpm) / 7500.0)
+            self.pop_cooldown = 0.22 if self.profile == "hornet" else (0.26 if self.profile == "ktm390" else 0.35)
         self.prev_throttle = new_thr
         self.throttle = new_thr
 
@@ -191,20 +195,28 @@ class EngineAudioPlayer:
 
         if self.pop_cooldown > 0.0:
             self.pop_cooldown = max(0.0, self.pop_cooldown - dt_block)
-        elif thr < 0.03 and rpm > 4800.0 and self.pop_pos < 0 and random.random() < 0.06:
-            # Pipocos ocasionais no freio-motor em alta rotacao
-            self.pop_pos = 0
-            self.pop_gain = 0.45
-            self.pop_cooldown = 0.22
+        else:
+            is_sport = self.profile in ("ktm390", "hornet")
+            pop_min_rpm = 3600.0 if is_sport else 4800.0
+            pop_chance = (0.16 if self.profile == "hornet" else 0.12) if is_sport else 0.06
+            if thr < 0.04 and rpm > pop_min_rpm and self.pop_pos < 0 and random.random() < pop_chance:
+                # Pipocos ocasionais no freio-motor (muito caracteristicos de escape direto)
+                self.pop_pos = 0
+                self.pop_gain = 0.58 if self.profile == "hornet" else (0.65 if self.profile == "ktm390" else 0.45)
+                self.pop_cooldown = 0.14 if self.profile == "hornet" else 0.18
 
-        # Corte de giro (rev limiter ~10400 RPM)
+        # Corte de giro (rev limiter)
         cut_env = 1.0
-        if rpm >= 10350.0:
-            self.cut_timer += dt_block * 22.0  # ~22 Hz de corte "ratatata"
+        cut_rpm = 10350.0
+        cut_speed = 28.0 if self.profile == "hornet" else 24.0
+        if rpm >= cut_rpm:
+            self.cut_timer += dt_block * cut_speed  # Metralhadora rapida no corte
             if int(self.cut_timer) % 2 == 1:
-                cut_env = 0.12
+                cut_env = 0.08
 
-        if self.profile == "berrador" and "idle" in self.samples:
+        if self.profile == "hornet":
+            sig = self._render_hornet(frames, rpm, thr)
+        elif self.profile == "berrador" and "idle" in self.samples:
             sig = self._render_berrador(frames, rpm, thr)
         else:
             sig = self._render_ktm390(frames, rpm, thr)
@@ -257,22 +269,94 @@ class EngineAudioPlayer:
         return out * 2.2
 
     def _render_ktm390(self, frames, rpm, thr):
-        """Sintese de monocilindrico 4 tempos (explosao a cada 2 voltas = RPM/120 Hz)."""
+        """Sintese fisica de monocilindrico 4 tempos 373cc (KTM Duke 390) 'So o Cano'.
+
+        Fidelidade real de monocilindrico esportivo com escape livre:
+        - 1 disparo por ciclo de 720 deg (f_fire = RPM / 120 Hz)
+        - Pulso de choque de alta pressao com ricochete de rarefacao (pistao de 89mm)
+        - Ressonancia acustica do duto aberto (~260 Hz corpo grave, ~780 Hz presenca)
+        - Soco ritmado e oco na lenta e grito estalado no giro alto
+        """
         f_fire = max(8.0, rpm / 120.0)
         dphi = 2.0 * np.pi * f_fire / self.SAMPLE_RATE
-        phi = self.ph_synth + dphi * np.arange(frames, dtype=np.float32)
+        phi = self.ph_synth + dphi * np.arange(frames, dtype=np.float64)
         self.ph_synth = float((self.ph_synth + dphi * frames) % (2.0 * np.pi))
 
-        # Pulso assimetrico de escapamento 1 cilindro + harmonicos pares/impares
-        sig = (
-            0.55 * np.sin(phi)
-            + 0.38 * np.sin(2.0 * phi + 0.4)
-            + (0.24 + 0.20 * thr) * np.sin(3.0 * phi + 0.9)
-            + (0.14 + 0.18 * thr) * np.sin(4.0 * phi)
-            + 0.10 * np.sin(6.0 * phi)
-        )
-        # Sopro/inducao de admissao proporcional ao TPS
-        if thr > 0.05:
-            noise = np.random.uniform(-0.12, 0.12, frames).astype(np.float32) * thr
-            sig = sig + noise
-        return sig * 0.65
+        tau = (phi % (2.0 * np.pi)) / (2.0 * np.pi)
+        t_in_cycle = tau / f_fire
+
+        # Onda de choque de combustao (pico inicial de alta pressao e retorno de vácuo)
+        shock = np.sin(np.pi * np.clip(tau / 0.35, 0.0, 1.0)) * np.exp(-11.0 * tau)
+        shock_crack = (np.exp(-22.0 * tau) - 0.45 * np.exp(-48.0 * tau)) * np.clip(1.0 - tau / 0.28, 0.0, 1.0)
+
+        # Ressonancia de coluna de gas em tubo de aco (~85 cm direto)
+        pipe_bass = np.sin(2.0 * np.pi * 260.0 * t_in_cycle) * np.exp(-110.0 * t_in_cycle)
+        pipe_ring = np.sin(2.0 * np.pi * 780.0 * t_in_cycle) * np.exp(-220.0 * t_in_cycle)
+        pipe_rasp = np.sin(2.0 * np.pi * 1850.0 * t_in_cycle) * np.exp(-340.0 * t_in_cycle)
+
+        # Ronco mecanico de fundo do virabrequim (f_crank = 2 * f_fire)
+        crank = 0.35 * np.sin(phi) + 0.28 * np.sin(2.0 * phi + 0.3) + 0.14 * np.sin(3.0 * phi)
+
+        # Balanco dinamico com acelerador (carga/TPS)
+        sig_pulse = (
+            shock * 1.70
+            + shock_crack * (1.10 + 2.10 * thr)
+            + pipe_bass * 0.90
+            + pipe_ring * (0.50 + 0.65 * thr)
+            + pipe_rasp * (0.28 + 0.85 * thr)
+        ) * (0.90 + 1.65 * thr)
+
+        sig_raw = crank * (0.50 + 0.50 * thr) + sig_pulse * 1.35
+
+        # Deformacao nao-linear de escape direto (estalo metalico raspado sem ruidos parasitas)
+        sig_dist = sig_raw + 0.35 * np.maximum(0.0, sig_raw)**1.8 - 0.18 * np.minimum(0.0, sig_raw)**2
+
+        sig_out = np.tanh(sig_dist * 0.78)
+        return sig_out.astype(np.float32) * 1.55
+
+    def _render_hornet(self, frames, rpm, thr):
+        """Sintese fisica de 4 cilindros em linha 600cc (Honda CB 600F Hornet) 'So o Cano'.
+
+        Mesma arquitetura fisica e harmonica da KTM Duke 390, adaptada para 4 cilindros:
+        - 2 disparos por volta do virabrequim (f_fire = RPM / 30 Hz)
+        - Pulso de choque de alta pressao com ricochete de rarefacao dos 4 cilindros
+        - Ressonancia acustica de coletor 4 em 1 (~360 Hz corpo grave, ~890 Hz medio, ~2350 Hz screamer)
+        - Ronco encorpado e gordo na lenta e berro rasgado agressivo em alta rotacao
+        """
+        f_fire = max(18.0, rpm / 30.0)
+        dphi = 2.0 * np.pi * f_fire / self.SAMPLE_RATE
+        phi = self.ph_synth_hornet + dphi * np.arange(frames, dtype=np.float64)
+        self.ph_synth_hornet = float((self.ph_synth_hornet + dphi * frames) % (2.0 * np.pi))
+
+        tau = (phi % (2.0 * np.pi)) / (2.0 * np.pi)
+        t_in_cycle = tau / f_fire
+
+        # Onda de choque de combustao de 4 cilindros (pico de alta pressao e retorno de vácuo)
+        shock = np.sin(np.pi * np.clip(tau / 0.40, 0.0, 1.0)) * np.exp(-12.0 * tau)
+        shock_crack = (np.exp(-24.0 * tau) - 0.50 * np.exp(-50.0 * tau)) * np.clip(1.0 - tau / 0.30, 0.0, 1.0)
+
+        # Ressonancias de coluna de gas em coletor 4x1 de inox aberto
+        pipe_bass = np.sin(2.0 * np.pi * 360.0 * t_in_cycle) * np.exp(-140.0 * t_in_cycle)
+        pipe_ring = np.sin(2.0 * np.pi * 890.0 * t_in_cycle) * np.exp(-250.0 * t_in_cycle)
+        pipe_scream = np.sin(2.0 * np.pi * 2350.0 * t_in_cycle) * np.exp(-380.0 * t_in_cycle)
+
+        # Ronco mecanico de virabrequim do 4 cilindros (f_crank = RPM / 60 = 0.5 * f_fire)
+        # Produz o peso grave gordo do 4 canecos na lenta
+        crank = 0.32 * np.sin(0.5 * phi) + 0.22 * np.sin(phi + 0.3) + 0.12 * np.sin(1.5 * phi)
+
+        # Balanco dinamico com acelerador (carga/TPS)
+        sig_pulse = (
+            shock * 1.65
+            + shock_crack * (1.00 + 1.90 * thr)
+            + pipe_bass * 0.85
+            + pipe_ring * (0.45 + 0.60 * thr)
+            + pipe_scream * (0.25 + 0.85 * thr)
+        ) * (0.90 + 1.60 * thr)
+
+        sig_raw = crank * (0.50 + 0.50 * thr) + sig_pulse * 1.30
+
+        # Deformacao nao-linear de escape direto 4x1 (estalo metalico raspado sem ruidos parasitas)
+        sig_dist = sig_raw + 0.32 * np.maximum(0.0, sig_raw)**1.8 - 0.16 * np.minimum(0.0, sig_raw)**2
+
+        sig_out = np.tanh(sig_dist * 0.78)
+        return sig_out.astype(np.float32) * 1.55

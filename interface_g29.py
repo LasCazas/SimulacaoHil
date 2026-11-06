@@ -95,7 +95,7 @@ class App(tk.Tk):
         self.cfg = self._load_cfg()
         self.mode_var = tk.StringVar(value=self.cfg.get("mode", "g29"))
         self.audio_on_var = tk.BooleanVar(value=self.cfg.get("audio_on", True))
-        self.audio_prof_var = tk.StringVar(value=self.cfg.get("audio_profile", "berrador"))
+        self.audio_prof_var = tk.StringVar(value=self.cfg.get("audio_profile", "ktm390"))
         self.audio_vol_var = tk.DoubleVar(value=float(self.cfg.get("audio_volume", 55.0)))
 
         # Inicializa player de som no PC (Berrador)
@@ -208,9 +208,9 @@ class App(tk.Tk):
         ).pack(side="left", padx=(8, 6), pady=3)
         cb_prof = ttk.Combobox(
             snd_frame,
-            width=12,
+            width=14,
             state="readonly",
-            values=["berrador", "ktm390"],
+            values=["ktm390", "hornet", "berrador"],
             textvariable=self.audio_prof_var,
         )
         cb_prof.pack(side="left", padx=3)
