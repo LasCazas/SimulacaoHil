@@ -2,7 +2,7 @@
   "port": "COM9",
   "mode": "manual",
   "audio_on": true,
-  "audio_profile": "ktm390",
+  "audio_profile": "hornet",
   "audio_volume": 37.3,
   "audio_device": "Padr\u00e3o do Windows",
   "axes": {

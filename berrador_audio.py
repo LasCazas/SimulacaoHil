@@ -64,8 +64,12 @@ class EngineAudioPlayer:
         self.ph_synth = 0.0
         self.ph_synth_hornet = 0.0
         self.cut_timer = 0.0
-        self.pop_pos = -1
+
+        # Gerador procedural de Pops & Bangs (tiros e estalos no escape direto)
+        self.pop_time = -1.0
+        self.pop_dur = 0.10
         self.pop_gain = 0.0
+        self.pop_kind = "bang"
         self.pop_cooldown = 0.0
 
         self.stream = None
@@ -147,23 +151,71 @@ class EngineAudioPlayer:
                 pass
             self.stream = None
 
+    def _trigger_pop(self, gain=0.8, kind="bang", dur=0.10):
+        """Dispara proceduralmente um tiro/pipoco (pop/bang) sintetico no escape."""
+        self.pop_time = 0.0
+        self.pop_dur = float(dur)
+        self.pop_gain = float(gain)
+        self.pop_kind = kind
+
+    def _render_pop_block(self, frames):
+        """Gera proceduralmente a onda de choque e ressonancia de um pipoco (pop/bang) no escape."""
+        if self.pop_time < 0.0:
+            return None
+        dt = 1.0 / self.SAMPLE_RATE
+        t = self.pop_time + dt * np.arange(frames, dtype=np.float32)
+        self.pop_time += frames * dt
+        if self.pop_time >= self.pop_dur:
+            self.pop_time = -1.0
+
+        valid = t < self.pop_dur
+        if not np.any(valid):
+            return None
+
+        tv = t[valid]
+        # Onda de choque: subida instantanea e expansao explosiva
+        decay = 95.0 if self.pop_kind == "bang" else 150.0
+        shock = np.exp(-decay * tv) * (1.0 - np.exp(-1800.0 * tv))
+
+        # Frequencias de ressonancia do escape da moto atual
+        is_hornet = self.profile == "hornet"
+        f1 = 360.0 if is_hornet else 260.0
+        f2 = 2200.0 if is_hornet else 1450.0
+
+        # Oscilacao acustica amortecida do gas no escape
+        ring = (
+            np.sin(2.0 * np.pi * f1 * tv) * np.exp(-40.0 * tv)
+            + 0.65 * np.sin(2.0 * np.pi * f2 * tv) * np.exp(-70.0 * tv)
+        )
+
+        # Ruido de chamas / turbulencia da combustao
+        noise_decay = 75.0 if self.pop_kind == "bang" else 120.0
+        noise = np.random.uniform(-0.35, 0.35, len(tv)).astype(np.float32) * np.exp(-noise_decay * tv)
+
+        sig_pop = (shock * 2.8 + ring * 1.3 + noise * 0.9) * float(self.pop_gain)
+        sig_pop = np.tanh(sig_pop * 1.4)
+
+        out = np.zeros(frames, dtype=np.float32)
+        out[valid] = sig_pop
+        return out
+
     def update_state(self, rpm, throttle_pct):
-        """Atualiza RPM (ex: 1000..10500) e TPS (0.0..1.0)."""
-        self.target_rpm = max(600.0, min(11500.0, float(rpm)))
+        """Atualiza RPM (ex: 1000..11500) e TPS (0.0..1.0)."""
+        self.target_rpm = max(600.0, min(12500.0, float(rpm)))
         new_thr = max(0.0, min(1.0, float(throttle_pct)))
 
-        # Dispara pipoco (pop) ao tirar o pe rapido em giro medio/alto
-        min_pop_rpm = 3400.0 if self.profile in ("ktm390", "hornet") else 4200.0
-        thr_drop = 0.18 if self.profile in ("ktm390", "hornet") else 0.25
+        # Dispara BANG seco de escape ao soltar o acelerador rapido em giro medio/alto
+        min_pop_rpm = 3300.0 if self.profile in ("ktm390", "hornet") else 4200.0
+        thr_drop = 0.16 if self.profile in ("ktm390", "hornet") else 0.25
         if (
             self.prev_throttle > thr_drop
             and new_thr < 0.07
             and self.smooth_rpm > min_pop_rpm
             and self.pop_cooldown <= 0.0
         ):
-            self.pop_pos = 0
-            self.pop_gain = min(1.0, 0.65 + (self.smooth_rpm - min_pop_rpm) / 7500.0)
-            self.pop_cooldown = 0.22 if self.profile == "hornet" else (0.26 if self.profile == "ktm390" else 0.35)
+            pop_pwr = min(1.0, 0.75 + (self.smooth_rpm - min_pop_rpm) / 6500.0)
+            self._trigger_pop(gain=pop_pwr, kind="bang", dur=0.11)
+            self.pop_cooldown = 0.20 if self.profile == "hornet" else 0.26
         self.prev_throttle = new_thr
         self.throttle = new_thr
 
@@ -197,13 +249,16 @@ class EngineAudioPlayer:
             self.pop_cooldown = max(0.0, self.pop_cooldown - dt_block)
         else:
             is_sport = self.profile in ("ktm390", "hornet")
-            pop_min_rpm = 3600.0 if is_sport else 4800.0
-            pop_chance = (0.16 if self.profile == "hornet" else 0.12) if is_sport else 0.06
-            if thr < 0.04 and rpm > pop_min_rpm and self.pop_pos < 0 and random.random() < pop_chance:
-                # Pipocos ocasionais no freio-motor (muito caracteristicos de escape direto)
-                self.pop_pos = 0
-                self.pop_gain = 0.58 if self.profile == "hornet" else (0.65 if self.profile == "ktm390" else 0.45)
-                self.pop_cooldown = 0.14 if self.profile == "hornet" else 0.18
+            pop_min_rpm = 3400.0 if is_sport else 4800.0
+            pop_chance = 0.22 if self.profile == "hornet" else 0.18
+            if thr < 0.04 and rpm > pop_min_rpm and self.pop_time < 0.0 and random.random() < pop_chance:
+                # Estalos em cascata no freio-motor (crackles procedurais de escape livre)
+                self._trigger_pop(
+                    gain=random.uniform(0.55, 0.90),
+                    kind="crackle",
+                    dur=random.uniform(0.05, 0.08)
+                )
+                self.pop_cooldown = random.uniform(0.08, 0.16)
 
         # Corte de giro (rev limiter)
         cut_env = 1.0
@@ -223,18 +278,10 @@ class EngineAudioPlayer:
 
         sig *= cut_env
 
-        # Mistura o pipoco (pop.wav) se ativo
-        pop_wav = self.samples.get("pop")
-        if self.pop_pos >= 0 and pop_wav is not None:
-            ratio = self.sample_sr / self.SAMPLE_RATE
-            idx = self.pop_pos + ratio * np.arange(frames, dtype=np.float32)
-            valid = idx < (len(pop_wav) - 1)
-            if np.any(valid):
-                vi = idx[valid].astype(np.int32)
-                sig[valid] += pop_wav[vi] * self.pop_gain * 0.95
-                self.pop_pos += ratio * frames
-            else:
-                self.pop_pos = -1
+        # Mistura o pipoco procedural sintetico no escape (zero samples de pop.wav)
+        pop_sig = self._render_pop_block(frames)
+        if pop_sig is not None:
+            sig += pop_sig
 
         # Ganho de carga + volume master + soft-clipping (tanh) para nao distorcer
         load_gain = 0.58 + 0.42 * thr
