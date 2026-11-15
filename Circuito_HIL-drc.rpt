@@ -1,0 +1,262 @@
+** Drc report for Circuito_HIL.kicad_pcb **
+** Created on 2026-11-13T17:41:35 **
+** Report includes: Errors, Warnings, Exclusions **
+
+** Found 64 DRC violations **
+[tracks_crossing]: Tracks crossing
+    Local override; error
+    @(22.0000 mm, 52.5400 mm): Track [Net-(U1-D26_(DAC_MAP))] on F.Cu, length 12.5400 mm
+    @(30.5700 mm, 50.0000 mm): Track [Net-(U1-D25_(DAC_TPS))] on F.Cu, length 12.5700 mm
+[shorting_items]: Itens encurtando duas redes (redes Net-(U1-D26_(DAC_MAP)) e <nenhuma rede>)
+    Local override; error
+    @(22.0000 mm, 40.0000 mm): Track [Net-(U1-D26_(DAC_MAP))] on F.Cu, length 50.9200 mm
+    @(30.5700 mm, 39.8400 mm): PTH pad 4 [<no net>] of U1
+[tracks_crossing]: Tracks crossing
+    Local override; error
+    @(24.0000 mm, 67.7800 mm): Track [+5V] on B.Cu, length 24.2200 mm
+    @(27.0000 mm, 88.0000 mm): Track [GND] on B.Cu, length 15.0000 mm
+[tracks_crossing]: Tracks crossing
+    Local override; error
+    @(30.5700 mm, 67.7800 mm): Track [+5V] on B.Cu, length 6.5700 mm
+    @(27.0000 mm, 65.2400 mm): Track [GND] on B.Cu, length 22.7600 mm
+[tracks_crossing]: Tracks crossing
+    Local override; error
+    @(80.0000 mm, 88.0000 mm): Track [GND] on B.Cu, length 70.7300 mm
+    @(48.0000 mm, 73.7300 mm): Track [/FB_IGN_3V3] on B.Cu, length 37.6500 mm
+[hole_clearance]: Violação do isolamento do furo (configuração das restrições do furo isolamento 0,2500 mm; atual 0,0000 mm)
+    Rule: configuração das restrições do furo; error
+    @(8.0000 mm, 92.0000 mm): Track [+5V] on B.Cu, length 87.4300 mm
+    @(9.0000 mm, 7.0000 mm): NPTH pad of 
+[hole_clearance]: Violação do isolamento do furo (configuração das restrições do furo isolamento 0,2500 mm; atual 0,2300 mm)
+    Rule: configuração das restrições do furo; error
+    @(8.0000 mm, 4.5700 mm): Track [+5V] on B.Cu, length 76.3800 mm
+    @(9.0000 mm, 7.0000 mm): NPTH pad of 
+[shorting_items]: Itens encurtando duas redes (redes +5V e GND)
+    Local override; error
+    @(84.3800 mm, 4.5700 mm): PTH pad 1 [+5V] of U2
+    @(84.3800 mm, 6.0000 mm): Track [GND] on B.Cu, length 1.1100 mm
+[tracks_crossing]: Tracks crossing
+    Local override; error
+    @(30.5700 mm, 55.0800 mm): Track [/I2S_BCK] on F.Cu, length 16.5700 mm
+    @(16.0000 mm, 57.6200 mm): Track [/I2S_LCK] on F.Cu, length 42.8900 mm
+[shorting_items]: Itens encurtando duas redes (redes Net-(U1-D25_(DAC_TPS)) e <nenhuma rede>)
+    Local override; error
+    @(18.0000 mm, 32.0000 mm): Track [Net-(U1-D25_(DAC_TPS))] on F.Cu, length 54.9200 mm
+    @(30.5700 mm, 32.2200 mm): PTH pad 1 [<no net>] of U1
+[tracks_crossing]: Tracks crossing
+    Local override; error
+    @(53.4300 mm, 57.6200 mm): Track [/FB_INJ_3V3] on B.Cu, length 9.4300 mm
+    @(48.0000 mm, 50.0000 mm): Track [/FB_IGN_3V3] on B.Cu, length 23.7300 mm
+[shorting_items]: Itens encurtando duas redes (redes +5V e GND)
+    Local override; error
+    @(84.3800 mm, 4.5700 mm): PTH pad 1 [+5V] of U2
+    @(12.0000 mm, 6.0000 mm): Track [GND] on B.Cu, length 72.3800 mm
+[hole_clearance]: Violação do isolamento do furo (configuração das restrições do furo isolamento 0,2500 mm; atual 0,0000 mm)
+    Rule: configuração das restrições do furo; error
+    @(24.0000 mm, 92.0000 mm): Track [+5V] on B.Cu, length 16.0000 mm
+    @(9.0000 mm, 91.0000 mm): NPTH pad of 
+[solder_mask_bridge]: A abertura da máscara de solda de trás conecta itens com redes diferentes
+    Rule: configuração da placa, largura mínima da máscara de solda; error
+    @(12.0000 mm, 6.0000 mm): Track [GND] on B.Cu, length 72.3800 mm
+    @(84.3800 mm, 4.5700 mm): PTH pad 1 [+5V] of U2
+[solder_mask_bridge]: A abertura da máscara de solda de trás conecta itens com redes diferentes
+    Rule: configuração da placa, largura mínima da máscara de solda; error
+    @(84.3800 mm, 6.0000 mm): Track [GND] on B.Cu, length 1.1100 mm
+    @(84.3800 mm, 4.5700 mm): PTH pad 1 [+5V] of U2
+[solder_mask_bridge]: A abertura da máscara de solda da frente conecta itens com redes diferentes
+    Rule: configuração da placa, largura mínima da máscara de solda; error
+    @(18.0000 mm, 32.0000 mm): Track [Net-(U1-D25_(DAC_TPS))] on F.Cu, length 54.9200 mm
+    @(30.5700 mm, 32.2200 mm): PTH pad 1 [<no net>] of U1
+[solder_mask_bridge]: A abertura da máscara de solda da frente conecta itens com redes diferentes
+    Rule: configuração da placa, largura mínima da máscara de solda; error
+    @(18.0000 mm, 32.0000 mm): Track [Net-(U1-D25_(DAC_TPS))] on F.Cu, length 54.9200 mm
+    @(53.4300 mm, 32.2200 mm): PTH pad 30 [<no net>] of U1
+[solder_mask_bridge]: A abertura da máscara de solda da frente conecta itens com redes diferentes
+    Rule: configuração da placa, largura mínima da máscara de solda; error
+    @(22.0000 mm, 40.0000 mm): Track [Net-(U1-D26_(DAC_MAP))] on F.Cu, length 50.9200 mm
+    @(30.5700 mm, 39.8400 mm): PTH pad 4 [<no net>] of U1
+[solder_mask_bridge]: A abertura da máscara de solda da frente conecta itens com redes diferentes
+    Rule: configuração da placa, largura mínima da máscara de solda; error
+    @(22.0000 mm, 40.0000 mm): Track [Net-(U1-D26_(DAC_MAP))] on F.Cu, length 50.9200 mm
+    @(53.4300 mm, 39.8400 mm): PTH pad 27 [<no net>] of U1
+[silk_edge_clearance]: Silkscreen clipped by board edge
+    Rule: configuração da serigrafia da placa; warning
+    @(4.0000 mm, 2.0000 mm): Rectangle on Edge.Cuts
+    @(92.0000 mm, 2.0000 mm): Reference field of U2
+[lib_footprint_mismatch]: O footprint 'MountingHole_3.2mm_M3' não corresponde à cópia na biblioteca 'MountingHole'
+    Local override; warning
+    @(9.0000 mm, 7.0000 mm): Footprint <no reference designator>
+[lib_footprint_mismatch]: O footprint 'MountingHole_3.2mm_M3' não corresponde à cópia na biblioteca 'MountingHole'
+    Local override; warning
+    @(141.0000 mm, 7.0000 mm): Footprint <no reference designator>
+[lib_footprint_mismatch]: O footprint 'MountingHole_3.2mm_M3' não corresponde à cópia na biblioteca 'MountingHole'
+    Local override; warning
+    @(9.0000 mm, 91.0000 mm): Footprint <no reference designator>
+[lib_footprint_mismatch]: O footprint 'MountingHole_3.2mm_M3' não corresponde à cópia na biblioteca 'MountingHole'
+    Local override; warning
+    @(141.0000 mm, 91.0000 mm): Footprint <no reference designator>
+[lib_footprint_issues]: A configuração atual não inclui a biblioteca de footprints 'HIL'
+    Local override; warning
+    @(42.0000 mm, 50.0000 mm): Footprint U1
+[lib_footprint_issues]: A configuração atual não inclui a biblioteca de footprints 'HIL'
+    Local override; warning
+    @(92.0000 mm, 16.0000 mm): Footprint U2
+[lib_footprint_issues]: A configuração atual não inclui a biblioteca de footprints 'HIL'
+    Local override; warning
+    @(92.0000 mm, 75.0000 mm): Footprint U3
+[lib_footprint_mismatch]: O footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal' não corresponde à cópia na biblioteca 'Resistor_THT'
+    Local override; warning
+    @(78.0000 mm, 32.0000 mm): Footprint R1
+[lib_footprint_mismatch]: O footprint 'C_Disc_D5.0mm_W2.5mm_P5.00mm' não corresponde à cópia na biblioteca 'Capacitor_THT'
+    Local override; warning
+    @(88.0000 mm, 29.0000 mm): Footprint C1
+[lib_footprint_mismatch]: O footprint 'R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal' não corresponde à cópia na biblioteca 'Resistor_THT'
+    Local override; warning
+    @(78.0000 mm, 40.0000 mm): Footprint R2
+[lib_footprint_mismatch]: O footprint 'C_Disc_D5.0mm_W2.5mm_P5.00mm' não corresponde à cópia na biblioteca 'Capacitor_THT'
+    Local override; warning
+    @(88.0000 mm, 42.0000 mm): Footprint C2
+[lib_footprint_mismatch]: O footprint 'TerminalBlock_Phoenix_MKDS-1,5-9-5.08_1x09_P5.08mm_Horizontal' não corresponde à cópia na biblioteca 'TerminalBlock_Phoenix'
+    Local override; warning
+    @(138.0000 mm, 50.0000 mm): Footprint J1
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(136.0000 mm, 74.0000 mm): Rectangle of J1 on F.Silkscreen
+    @(138.0000 mm, 75.0000 mm): Value field of J1 (Borne_Speeduino_9P)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(92.0000 mm, 75.0000 mm): Footprint text of U3 (CONVERTER)
+    @(92.0000 mm, 75.0000 mm): Footprint text of U3 (CONV 3V-5V)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(92.0000 mm, 75.0000 mm): Footprint text of U3 (CONVERTER)
+    @(94.5500 mm, 73.7300 mm): Footprint text of U3 (IGN)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(92.0000 mm, 75.0000 mm): Footprint text of U3 (CONV 3V-5V)
+    @(94.5500 mm, 71.1900 mm): Footprint text of U3 (GND)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(89.4500 mm, 71.1900 mm): Footprint text of U3 (GND)
+    @(92.0000 mm, 75.0000 mm): Footprint text of U3 (CONV 3V-5V)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(89.4500 mm, 71.1900 mm): Footprint text of U3 (GND)
+    @(94.5500 mm, 71.1900 mm): Footprint text of U3 (GND)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(92.0000 mm, 75.0000 mm): Footprint text of U3 (CONV 3V-5V)
+    @(94.5500 mm, 73.7300 mm): Footprint text of U3 (IGN)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(42.0000 mm, 28.0000 mm): Reference field of U1
+    @(37.5000 mm, 28.5000 mm): Rectangle of U1 on F.Silkscreen
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(88.8800 mm, 19.8100 mm): Footprint text of U2 (XMT)
+    @(92.0000 mm, 16.0000 mm): Footprint text of U2 (PCM5102A (VR))
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(88.8800 mm, 17.2700 mm): Footprint text of U2 (SCK)
+    @(92.0000 mm, 16.0000 mm): Footprint text of U2 (PCM5102A (VR))
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(92.0000 mm, 16.0000 mm): Footprint text of U2 (PCM5102A (VR))
+    @(88.8800 mm, 14.7300 mm): Footprint text of U2 (LCK)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(96.5000 mm, 15.0000 mm): Footprint text of U2 (CRK+)
+    @(92.0000 mm, 16.0000 mm): Footprint text of U2 (PCM5102A (VR))
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(88.0000 mm, 29.0000 mm): Circle of C1 on F.Silkscreen
+    @(88.8800 mm, 27.4300 mm): Footprint text of U2 (DMP)
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(88.0000 mm, 29.0000 mm): Circle of C1 on F.Silkscreen
+    @(82.0000 mm, 3.5000 mm): Rectangle of U2 on F.Silkscreen
+[silk_overlap]: Silkscreen clearance
+    Rule: configuração da serigrafia da placa; warning
+    @(82.0000 mm, 3.5000 mm): Rectangle of U2 on F.Silkscreen
+    @(91.8000 mm, 28.0000 mm): Reference field of C1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(136.0000 mm, 86.0000 mm): Rectangle of J1 on F.Silkscreen
+    @(141.0000 mm, 91.0000 mm): NPTH pad of 
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(138.0000 mm, 75.0000 mm): Value field of J1 (Borne_Speeduino_9P)
+    @(138.0000 mm, 76.0000 mm): PTH pad 8 [/SPEEDUINO_INJ] of J1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(133.5000 mm, 26.5000 mm): Rectangle of J1 on F.Silkscreen
+    @(138.0000 mm, 72.0000 mm): PTH pad 7 [/SPEEDUINO_IGN] of J1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(31.0000 mm, 64.0000 mm): Rectangle of U1 on F.Silkscreen
+    @(53.4300 mm, 67.7800 mm): PTH pad 16 [+3V3] of U1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(31.0000 mm, 64.0000 mm): Rectangle of U1 on F.Silkscreen
+    @(53.4300 mm, 65.2400 mm): PTH pad 17 [/CLUTCH_SIG] of U1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(31.0000 mm, 64.0000 mm): Rectangle of U1 on F.Silkscreen
+    @(30.5700 mm, 67.7800 mm): PTH pad 15 [+5V] of U1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(31.0000 mm, 64.0000 mm): Rectangle of U1 on F.Silkscreen
+    @(30.5700 mm, 65.2400 mm): PTH pad 14 [GND] of U1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(88.0000 mm, 29.0000 mm): Circle of C1 on F.Silkscreen
+    @(88.0000 mm, 26.0000 mm): PTH pad 2 [GND] of C1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(88.0000 mm, 29.0000 mm): Circle of C1 on F.Silkscreen
+    @(88.0000 mm, 32.0000 mm): PTH pad 1 [/NET_TPS_OUT] of C1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(72.9200 mm, 32.0000 mm): Segment of R1 on F.Silkscreen
+    @(72.9200 mm, 32.0000 mm): PTH pad 2 [Net-(U1-D25_(DAC_TPS))] of R1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(81.1500 mm, 32.0000 mm): Segment of R1 on F.Silkscreen
+    @(83.0800 mm, 32.0000 mm): PTH pad 1 [/NET_TPS_OUT] of R1
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(72.9200 mm, 40.0000 mm): Segment of R2 on F.Silkscreen
+    @(72.9200 mm, 40.0000 mm): PTH pad 2 [Net-(U1-D26_(DAC_MAP))] of R2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(81.1500 mm, 40.0000 mm): Segment of R2 on F.Silkscreen
+    @(83.0800 mm, 40.0000 mm): PTH pad 1 [/NET_MAP_OUT] of R2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(88.0000 mm, 42.0000 mm): Circle of C2 on F.Silkscreen
+    @(88.0000 mm, 40.0000 mm): PTH pad 1 [/NET_MAP_OUT] of C2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(88.0000 mm, 42.0000 mm): Circle of C2 on F.Silkscreen
+    @(88.0000 mm, 44.0000 mm): PTH pad 2 [GND] of C2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(82.0000 mm, 3.5000 mm): Rectangle of U2 on F.Silkscreen
+    @(84.3800 mm, 4.5700 mm): PTH pad 1 [+5V] of U2
+[silk_over_copper]: Silkscreen clipped by solder mask
+    Local override; warning
+    @(82.0000 mm, 3.5000 mm): Rectangle of U2 on F.Silkscreen
+    @(84.3800 mm, 27.4300 mm): PTH pad 10 [GND] of U2
+
+** Found 0 unconnected pads **
+
+** Found 0 Footprint errors **
+
+** Ignored checks **
+    - Footprint has no courtyard defined
+    - Track endpoint not centered on via
+    - Tuning profile track geometries
+    - Footprint doesn't match symbol's footprint filters
+    - Footprint component type doesn't match footprint pads
+
+** End of Report **

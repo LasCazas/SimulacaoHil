@@ -193,7 +193,12 @@ Referência GND & GND & Terra Comum & \texttt{B\_A8} / \texttt{B\_B3} & Unificar
 \bottomrule
 \end{tabularx}
 \vspace{2pt}
-\raggedright{\scriptsize $^{*}$No módulo PCM5102A, manter o pino \texttt{SCK} aterrado ao \texttt{GND}, alimentar \texttt{VIN} em $5\text{ V}$ e conectar a saída de áudio analógica (\texttt{L}) em \texttt{B\_B2} e o terra de áudio em \texttt{B\_B3 (VR1-)}.}
+\raggedright{\scriptsize $^{*}$No módulo PCM5102A, as seguintes ligações de configuração são \textbf{obrigatórias}:
+(1) Manter o pino \texttt{SCK} aterrado ao \texttt{GND} (ativa o PLL interno de clock a partir do \texttt{BCK});
+(2) Ligar o pino \texttt{XMT} (Soft Mute) ao \textbf{\texttt{3.3V}} do ESP32 (se ficar solto, a placa entra em mudo total por padrão);
+(3) Ligar os pinos \texttt{FMT}, \texttt{FLT} e \texttt{DMP} ao \texttt{GND};
+(4) Alimentar \texttt{VIN} em $5\text{ V}$ (pino \texttt{VIN} do ESP32);
+(5) Conectar a saída de áudio analógica (\texttt{L}) em \texttt{B\_B2} e o terra de áudio em \texttt{B\_B3 (VR1-)}.}
 \end{table}
 
 \subsection{Condicionamento de Retorno com Conversor de Nível Lógico (Bancada sem Bobina e sem Bico Físicos)}
@@ -331,7 +336,7 @@ ESP32 $\rightarrow$ PC ($20\text{ Hz}$) & \texttt{rpm,vss,inj,ign,gr,kmh,tq,map,
     \item \textbf{Gravar o Firmware no ESP32 DevKit V1:}
     Abra \texttt{HIL\_Esp/HIL\_Esp.ino} na Arduino IDE (com o pacote oficial \textit{esp32 by Espressif Systems} instalado), selecione a placa \textbf{ESP32 Dev Module} e faça o upload via USB.
     \item \textbf{Montar as Conexões de Bancada:}
-    Realize as ligações conforme a Tabela~\ref{tab:pinout} e a Seção~5, certificando-se de instalar os filtros RC nos pinos 25 e 26, aterrar o pino \texttt{SCK} do PCM5102A e alimentar o Conversor de Nível Lógico com \texttt{HV = 5V}, \texttt{LV = 3.3V} e \texttt{GND} comum.
+    Realize as ligações conforme a Tabela~\ref{tab:pinout} e a Seção~5, certificando-se de instalar os filtros RC nos pinos 25 e 26, aterrar o pino \texttt{SCK} do PCM5102A ao \texttt{GND}, ligar o pino \texttt{XMT} ao \texttt{3.3V} (desmutar o DAC), e alimentar o Conversor de Nível Lógico com \texttt{HV = 5V}, \texttt{LV = 3.3V} e \texttt{GND} comum.
     \item \textbf{Preparar o Ambiente Python e Executar a Interface:}
     Clone o repositório, crie/ative o ambiente virtual e instale as dependências:
     \begin{quote}

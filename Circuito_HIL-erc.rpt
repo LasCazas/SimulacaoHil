@@ -1,0 +1,147 @@
+ERC report (2026-11-14T13:30:02, Encoding UTF8)
+Report includes: Errors, Warnings
+
+***** Sheet /
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(74.93 mm, 132.08 mm): Symbol #PWR01 Pin 1 [Power input, Line]
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(107.95 mm, 139.70 mm): Symbol #PWR04 Pin 1 [Power input, Line]
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(153.67 mm, 137.16 mm): Symbol U1 Pin 17 [GND, Power input, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(219.71 mm, 177.80 mm): Symbol U3 Pin 4 [GND_(HV), Power input, Line]
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(219.71 mm, 177.80 mm): Symbol U3 Pin 4 [GND_(HV), Power input, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(255.27 mm, 172.72 mm): Symbol U3 Pin 9 [LV_(3V3), Power input, Line]
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(255.27 mm, 172.72 mm): Symbol U3 Pin 9 [LV_(3V3), Power input, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(255.27 mm, 177.80 mm): Symbol U3 Pin 10 [GND_(LV), Power input, Line]
+[power_pin_not_driven]: Input Power pin not driven by any Output Power pins
+    ; error
+    @(255.27 mm, 177.80 mm): Symbol U3 Pin 10 [GND_(LV), Power input, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(265.43 mm, 165.10 mm): Symbol #PWR12 Pin 1 [Power input, Line]
+[pin_to_pin]: Os pinos do tipo Output e Output estão conectados
+    ; error
+    @(318.77 mm, 129.54 mm): Symbol J1 Pin 8 [G_B1_(IGN-1-OUT), Output, Line]
+    @(255.27 mm, 167.64 mm): Symbol U3 Pin 8 [RXO1_(->_D5), Output, Line]
+[lib_symbol_mismatch]: O símbolo 'C' não bate com a cópia existente na biblioteca 'Device'
+    ; warning
+    @(74.93 mm, 127.00 mm): Symbol C1 [C]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(74.93 mm, 132.08 mm): Symbol #PWR01 [GND]
+[lib_symbol_mismatch]: O símbolo 'C' não bate com a cópia existente na biblioteca 'Device'
+    ; warning
+    @(74.93 mm, 153.67 mm): Symbol C2 [C]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(74.93 mm, 160.02 mm): Symbol #PWR02 [GND]
+[unconnected_wire_endpoint]: Extremidade do fio não conectado
+    ; warning
+    @(82.55 mm, 124.46 mm): Horizontal Wire, length 10.16 mm
+[lib_symbol_mismatch]: O símbolo 'R' não bate com a cópia existente na biblioteca 'Device'
+    ; warning
+    @(90.17 mm, 121.92 mm): Symbol R1 [R]
+[lib_symbol_mismatch]: O símbolo 'R' não bate com a cópia existente na biblioteca 'Device'
+    ; warning
+    @(90.17 mm, 147.32 mm): Symbol R2 [R]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(107.95 mm, 137.16 mm): Symbol #PWR03 [GND]
+[lib_symbol_mismatch]: O símbolo '+5V' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(107.95 mm, 139.70 mm): Symbol #PWR04 [+5V]
+[footprint_link_issues]: Footprint 'ESP32_DevKit_V1_30Pin' não encontrado na biblioteca 'Module'
+    ; warning
+    @(135.89 mm, 121.92 mm): Symbol U1 [ESP32_DevKit_V1_30Pin]
+[lib_symbol_issues]: A configuração atual não inclui os símbolos da biblioteca 'HIL'
+    ; warning
+    @(135.89 mm, 121.92 mm): Symbol U1 [ESP32_DevKit_V1_30Pin]
+[ground_pin_not_ground]: Pino GND não conectado à rede de terra
+    ; warning
+    @(153.67 mm, 137.16 mm): Symbol U1 Pin 17 [GND, Power input, Line]
+[lib_symbol_mismatch]: O símbolo '+3V3' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(163.83 mm, 139.70 mm): Symbol #PWR05 [+3V3]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(193.04 mm, 97.79 mm): Symbol #PWR09 [GND]
+[lib_symbol_mismatch]: O símbolo '+3V3' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(203.20 mm, 87.63 mm): Symbol #PWR08 [+3V3]
+[lib_symbol_mismatch]: O símbolo '+5V' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(204.47 mm, 72.39 mm): Symbol #PWR06 [+5V]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(204.47 mm, 74.93 mm): Symbol #PWR07 [GND]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(209.55 mm, 167.64 mm): Symbol #PWR11 [GND]
+[lib_symbol_mismatch]: O símbolo '+5V' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(209.55 mm, 172.72 mm): Symbol #PWR10 [+5V]
+[unconnected_wire_endpoint]: Extremidade do fio não conectado
+    ; warning
+    @(219.71 mm, 177.80 mm): Horizontal Wire, length 10.16 mm
+[footprint_link_issues]: Footprint 'PCM5102A_Module' não encontrado na biblioteca 'Module'
+    ; warning
+    @(237.49 mm, 83.82 mm): Symbol U2 [PCM5102A_Module]
+[lib_symbol_issues]: A configuração atual não inclui os símbolos da biblioteca 'HIL'
+    ; warning
+    @(237.49 mm, 83.82 mm): Symbol U2 [PCM5102A_Module]
+[footprint_link_issues]: Footprint 'Level_Converter_4CH' não encontrado na biblioteca 'Module'
+    ; warning
+    @(237.49 mm, 172.72 mm): Symbol U3 [Logic_Level_Converter_4CH]
+[lib_symbol_issues]: A configuração atual não inclui os símbolos da biblioteca 'HIL'
+    ; warning
+    @(237.49 mm, 172.72 mm): Symbol U3 [Logic_Level_Converter_4CH]
+[lib_symbol_mismatch]: O símbolo '+3V3' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(265.43 mm, 165.10 mm): Symbol #PWR12 [+3V3]
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(265.43 mm, 167.64 mm): Symbol #PWR13 [GND]
+[multiple_net_names]: Ambos os GND e FB_IGN_3V3 estão ligados aos mesmos itens; o GND será utilizado na netlist
+    ; warning
+    @(209.55 mm, 167.64 mm): Symbol #PWR11 Pin 1 [Power input, Line]
+    @(265.43 mm, 167.64 mm): Label 'FB_IGN_3V3'
+[same_local_global_label]: Local and global labels have same name
+    ; warning
+    @(265.43 mm, 167.64 mm): Symbol #PWR13 Pin 1 [Power input, Line]
+    @(72.39 mm, 124.46 mm): Label 'GND'
+[unconnected_wire_endpoint]: Extremidade do fio não conectado
+    ; warning
+    @(255.27 mm, 172.72 mm): Horizontal Wire, length 10.16 mm
+[unconnected_wire_endpoint]: Extremidade do fio não conectado
+    ; warning
+    @(255.27 mm, 177.80 mm): Horizontal Wire, length 10.16 mm
+[lib_symbol_mismatch]: O símbolo 'GND' não bate com a cópia existente na biblioteca 'power'
+    ; warning
+    @(308.61 mm, 132.08 mm): Symbol #PWR14 [GND]
+[footprint_link_issues]: A configuração atual não inclui a biblioteca de footprints 'Connector_TerminalBlock'
+    ; warning
+    @(339.09 mm, 121.92 mm): Symbol J1 [Conn_Speeduino_Chicote]
+[lib_symbol_issues]: A configuração atual não inclui os símbolos da biblioteca 'HIL'
+    ; warning
+    @(339.09 mm, 121.92 mm): Symbol J1 [Conn_Speeduino_Chicote]
+
+ ** ERC messages: 44  Errors 11  Warnings 33
+
+ ** Ignored checks:
+    - Global label only appears once in the schematic
+    - Four connection points are joined together
+    - SPICE model issue
+    - Assigned footprint doesn't match footprint filters

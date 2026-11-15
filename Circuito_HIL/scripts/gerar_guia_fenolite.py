@@ -1,0 +1,459 @@
+# Gerador do Guia Visual Interativo de Montagem na Fenolite Perfurada
+html_content = """<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Montagem na Fenolite Perfurada — Bancada HIL Speeduino</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #00e5ff;
+            --border: #334155;
+            --green: #10b981;
+            --orange: #f59e0b;
+            --red: #ef4444;
+            --purple: #a855f7;
+            --blue: #3b82f6;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 24px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid var(--border);
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        h1 { font-size: 24px; color: var(--accent); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        h2 { font-size: 18px; color: #38bdf8; margin: 20px 0 12px; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+        .badge {
+            background: #0369a1; color: white; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold;
+        }
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        @media(max-width: 900px) { .grid-layout { grid-template-columns: 1fr; } }
+        
+        /* Tabela De/Para */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        th { background-color: #0f172a; color: var(--accent); font-weight: 600; }
+        tr:hover { background-color: rgba(255,255,255,0.03); }
+        .tag {
+            display: inline-block; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-family: monospace; font-size: 12px;
+        }
+        .tag-pwr { background: #7f1d1d; color: #fca5a5; }
+        .tag-gnd { background: #374151; color: #d1d5db; }
+        .tag-sig { background: #065f46; color: #6ee7b7; }
+        .tag-ecu { background: #1e3a8a; color: #93c5fd; }
+        .tag-rc  { background: #581c87; color: #d8b4fe; }
+
+        /* Mapa Visual SVG da Placa */
+        .board-canvas-wrap {
+            overflow-x: auto;
+            background: #18120c;
+            border: 2px solid #78350f;
+            border-radius: 10px;
+            padding: 16px;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.8);
+        }
+        svg { display: block; margin: 0 auto; user-select: none; }
+        .hole { fill: #d97706; opacity: 0.35; }
+        .hole-active { fill: #fbbf24; opacity: 0.9; }
+        
+        /* Checklist */
+        .checklist { list-style: none; }
+        .checklist li {
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            border-left: 4px solid var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .check-box {
+            width: 18px; height: 18px; border: 2px solid var(--accent); border-radius: 4px; display: inline-block;
+        }
+
+        .alert-box {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--red);
+            border-left: 5px solid var(--red);
+            padding: 14px 18px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+        .alert-box strong { color: #fca5a5; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>⚡ Guia de Montagem na Fenolite Perfurada — Bancada HIL Speeduino</h1>
+        <p style="color: var(--text-muted); font-size: 14px;">
+            Equipe IF Betim Racing · IFMG Campus Betim | Modelagem KTM Duke 390 (22-2) & Speeduino 48-Way
+        </p>
+    </header>
+
+    <div class="alert-box">
+        <strong>⚠️ REGRA DE OURO DE SEGURANÇA:</strong>
+        <br>1. <strong>NUNCA solde os módulos (ESP32, PCM5102, Conversor) direto na placa!</strong> Solde <strong>barras de pinos fêmea (soquetes)</strong> na fenolite e encaixe os módulos por cima. Isso evita queimar os chips pelo calor do ferro de solda e facilita a troca imediata se precisar.
+        <br>2. <strong>NÃO INJETE 12V NO CONVERSOR DE NÍVEL LÓGICO!</strong> O pino <code>HV</code> dele vai no <strong>5V (VIN do ESP32)</strong> e o <code>LV</code> vai no <strong>3.3V</strong>.
+    </div>
+
+    <div class="card">
+        <h2>🗺️ Mapa Visual Físico da Placa de Fenolite Perfurada (Padrão 2.54 mm)</h2>
+        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">
+            Este mapa mostra exatamente onde posicionar os soquetes fêmea dos 3 módulos, os filtros RC e os bornes do chicote na sua placa perfurada:
+        </p>
+        
+        <div class="board-canvas-wrap">
+            <svg width="1050" height="520" viewBox="0 0 1050 520">
+                <!-- Fundo estilo Fenolite Ilhada Cobreada -->
+                <rect x="10" y="10" width="1030" height="500" rx="12" fill="#2d1a0e" stroke="#92400e" stroke-width="3"/>
+                
+                <!-- Grade de Ilhas / Furos 2.54mm -->
+                <pattern id="fenolite-grid" width="16" height="16" patternUnits="userSpaceOnUse">
+                    <circle cx="8" cy="8" r="4.2" fill="#b45309" stroke="#78350f" stroke-width="0.8"/>
+                    <circle cx="8" cy="8" r="1.8" fill="#1c1109"/>
+                </pattern>
+                <rect x="25" y="25" width="1000" height="470" fill="url(#fenolite-grid)"/>
+
+                <!-- 1. Módulo ESP32 DevKit V1 (30 pinos) -->
+                <g id="mod-esp32">
+                    <rect x="70" y="60" width="220" height="380" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+                    <rect x="130" y="45" width="100" height="28" rx="4" fill="#64748b" stroke="#94a3b8" stroke-width="1"/>
+                    <text x="180" y="63" fill="#ffffff" font-size="10" font-family="monospace" text-anchor="middle">USB CONECTOR</text>
+                    <text x="180" y="230" fill="#38bdf8" font-size="14" font-weight="bold" text-anchor="middle">ESP32 DevKit V1</text>
+                    <text x="180" y="250" fill="#94a3b8" font-size="11" text-anchor="middle">(30 Pinos DIP)</text>
+                    
+                    <!-- Barra de pinos Esquerda (1-15) -->
+                    <rect x="75" y="80" width="22" height="340" rx="3" fill="#0f172a" stroke="#00e5ff" stroke-width="1.5"/>
+                    <text x="86" y="250" fill="#00e5ff" font-size="9" font-family="monospace" text-anchor="middle" transform="rotate(-90 86 250)">SOQUETE FÊMEA 15 PINOS (ESQ)</text>
+
+                    <!-- Barra de pinos Direita (16-30) -->
+                    <rect x="263" y="80" width="22" height="340" rx="3" fill="#0f172a" stroke="#00e5ff" stroke-width="1.5"/>
+                    <text x="274" y="250" fill="#00e5ff" font-size="9" font-family="monospace" text-anchor="middle" transform="rotate(90 274 250)">SOQUETE FÊMEA 15 PINOS (DIR)</text>
+                </g>
+
+                <!-- 2. Filtros RC Analógicos (TPS e MAP) -->
+                <g id="mod-rc">
+                    <rect x="330" y="70" width="210" height="210" rx="8" fill="#1e1b4b" stroke="#a855f7" stroke-width="2"/>
+                    <text x="435" y="95" fill="#d8b4fe" font-size="13" font-weight="bold" text-anchor="middle">FILTROS RC ANALÓGICOS</text>
+                    <text x="435" y="112" fill="#a855f7" font-size="10" text-anchor="middle">Suavização dos DACs 25 e 26</text>
+
+                    <!-- Resistor TPS -->
+                    <rect x="350" y="130" width="65" height="24" rx="4" fill="#3b0764" stroke="#c084fc" stroke-width="1.5"/>
+                    <text x="382" y="146" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">R1: 10kΩ</text>
+                    <!-- Capacitor TPS -->
+                    <circle cx="480" cy="142" r="14" fill="#3b0764" stroke="#c084fc" stroke-width="1.5"/>
+                    <text x="480" y="146" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">1µF</text>
+                    <text x="435" y="170" fill="#c084fc" font-size="10" text-anchor="middle">Canal TPS (GPIO25 -> B_C7)</text>
+
+                    <!-- Resistor MAP -->
+                    <rect x="350" y="195" width="65" height="24" rx="4" fill="#3b0764" stroke="#c084fc" stroke-width="1.5"/>
+                    <text x="382" y="211" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">R2: 10kΩ</text>
+                    <!-- Capacitor MAP -->
+                    <circle cx="480" cy="207" r="14" fill="#3b0764" stroke="#c084fc" stroke-width="1.5"/>
+                    <text x="480" y="211" fill="#ffffff" font-size="9" font-weight="bold" text-anchor="middle">1µF</text>
+                    <text x="435" y="235" fill="#c084fc" font-size="10" text-anchor="middle">Canal MAP (GPIO26 -> B_C8)</text>
+                </g>
+
+                <!-- 3. Módulo PCM5102A (Roda Fônica 22-2) -->
+                <g id="mod-pcm">
+                    <rect x="580" y="60" width="180" height="230" rx="8" fill="#311042" stroke="#d946ef" stroke-width="2"/>
+                    <text x="670" y="85" fill="#f5d0fe" font-size="13" font-weight="bold" text-anchor="middle">MÓDULO PCM5102A</text>
+                    <text x="670" y="102" fill="#d946ef" font-size="10" text-anchor="middle">Placa Roxa (Senoide 22-2)</text>
+                    
+                    <!-- Barra de pinos superior -->
+                    <rect x="595" y="115" width="150" height="22" rx="3" fill="#180424" stroke="#f472b6" stroke-width="1.5"/>
+                    <text x="670" y="130" fill="#f472b6" font-size="9" font-family="monospace" text-anchor="middle">SOQUETE FÊMEA 10 PINOS</text>
+
+                    <!-- Pinos de Saída Analógica -->
+                    <circle cx="630" cy="220" r="12" fill="#180424" stroke="#22c55e" stroke-width="2"/>
+                    <text x="630" y="224" fill="#22c55e" font-size="10" font-weight="bold" text-anchor="middle">L</text>
+                    <text x="630" y="245" fill="#4ade80" font-size="9" text-anchor="middle">Crank B_B2</text>
+
+                    <circle cx="710" cy="220" r="12" fill="#180424" stroke="#94a3b8" stroke-width="2"/>
+                    <text x="710" y="224" fill="#94a3b8" font-size="10" font-weight="bold" text-anchor="middle">G</text>
+                    <text x="710" y="245" fill="#cbd5e1" font-size="9" text-anchor="middle">VR- B_B3</text>
+                </g>
+
+                <!-- 4. Módulo Conversor de Nível Lógico (Level Converter) -->
+                <g id="mod-level">
+                    <rect x="330" y="300" width="430" height="150" rx="8" fill="#082f49" stroke="#0ea5e9" stroke-width="2"/>
+                    <text x="545" y="325" fill="#bae6fd" font-size="13" font-weight="bold" text-anchor="middle">CONVERSOR DE NÍVEL LÓGICO BIDIRECIONAL (4 CANAIS)</text>
+                    
+                    <!-- Lado HV (5V - Speeduino) -->
+                    <rect x="350" y="345" width="170" height="85" rx="6" fill="#0c4a6e" stroke="#38bdf8" stroke-width="1"/>
+                    <text x="435" y="365" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">LADO HV (5V)</text>
+                    <text x="435" y="385" fill="#ffffff" font-size="10" text-anchor="middle">HV1 <- Ignição G_B1</text>
+                    <text x="435" y="405" fill="#ffffff" font-size="10" text-anchor="middle">HV2 <- Injeção G_A1</text>
+                    <text x="435" y="420" fill="#fca5a5" font-size="9" text-anchor="middle">HV=5V | GND=Terra</text>
+
+                    <!-- Lado LV (3.3V - ESP32) -->
+                    <rect x="570" y="345" width="170" height="85" rx="6" fill="#0c4a6e" stroke="#00e5ff" stroke-width="1"/>
+                    <text x="655" y="365" fill="#00e5ff" font-size="11" font-weight="bold" text-anchor="middle">LADO LV (3.3V)</text>
+                    <text x="655" y="385" fill="#ffffff" font-size="10" text-anchor="middle">LV1 -> GPIO 5 (Ign)</text>
+                    <text x="655" y="405" fill="#ffffff" font-size="10" text-anchor="middle">LV2 -> GPIO 4 (Inj)</text>
+                    <text x="655" y="420" fill="#67e8f9" font-size="9" text-anchor="middle">LV=3.3V | GND=Terra</text>
+                </g>
+
+                <!-- 5. Barra de Saída / Bornes para o Chicote da Speeduino -->
+                <g id="mod-bornes">
+                    <rect x="800" y="60" width="200" height="390" rx="8" fill="#14532d" stroke="#22c55e" stroke-width="2"/>
+                    <text x="900" y="88" fill="#bbf7d0" font-size="13" font-weight="bold" text-anchor="middle">BORNE DE SAÍDA</text>
+                    <text x="900" y="105" fill="#86efac" font-size="10" text-anchor="middle">Chicote Speeduino 48-Way</text>
+
+                    <!-- Terminais individuais -->
+                    <g transform="translate(820, 120)">
+                        <circle cx="10" cy="15" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="19" fill="#ffffff" font-size="11" font-family="monospace">1: B_B2 (CRANK+)</text>
+
+                        <circle cx="10" cy="45" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="49" fill="#ffffff" font-size="11" font-family="monospace">2: B_B3 (VR1- GND)</text>
+
+                        <circle cx="10" cy="75" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="79" fill="#ffffff" font-size="11" font-family="monospace">3: B_C7 (TPS Filt.)</text>
+
+                        <circle cx="10" cy="105" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="109" fill="#ffffff" font-size="11" font-family="monospace">4: B_C8 (MAP Filt.)</text>
+
+                        <circle cx="10" cy="135" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="139" fill="#ffffff" font-size="11" font-family="monospace">5: B_A7 (VSS D16)</text>
+
+                        <circle cx="10" cy="165" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="169" fill="#ffffff" font-size="11" font-family="monospace">6: B_B7 (Embr D15)</text>
+
+                        <circle cx="10" cy="195" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="199" fill="#ffffff" font-size="11" font-family="monospace">7: G_A1 (INJ Ret.)</text>
+
+                        <circle cx="10" cy="225" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="229" fill="#ffffff" font-size="11" font-family="monospace">8: G_B1 (IGN Ret.)</text>
+
+                        <circle cx="10" cy="255" r="8" fill="#052e16" stroke="#4ade80" stroke-width="2"/>
+                        <text x="26" y="259" fill="#ffffff" font-size="11" font-family="monospace">9: B_A8 (GND ECU)</text>
+                    </g>
+                </g>
+
+                <!-- Linhas de Barramento de Alimentação na Base -->
+                <line x1="30" y1="480" x2="1020" y2="480" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4"/>
+                <text x="40" y="474" fill="#fca5a5" font-size="10" font-weight="bold">TRILHO 5V (VIN)</text>
+
+                <line x1="30" y1="495" x2="1020" y2="495" stroke="#64748b" stroke-width="4"/>
+                <text x="40" y="508" fill="#cbd5e1" font-size="10" font-weight="bold">TRILHO GND (TERRA COMUM UNIFICADO)</text>
+            </svg>
+        </div>
+    </div>
+
+    <div class="grid-layout">
+        <!-- Tabela Ponto a Ponto -->
+        <div class="card">
+            <h2>📋 Tabela Ponto a Ponto de Soldagem (De ➔ Para)</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Origem</th>
+                        <th>Destino</th>
+                        <th>Tipo / Componente</th>
+                        <th>Função</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 25</span></td>
+                        <td>R1 (10kΩ) ➔ <span class="tag tag-ecu">B_C7</span></td>
+                        <td><span class="tag tag-rc">Filtro RC Série</span></td>
+                        <td>Sinal analógico do TPS (Borboleta)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-ecu">B_C7</span></td>
+                        <td>C1 (1µF) ➔ <span class="tag tag-gnd">GND</span></td>
+                        <td><span class="tag tag-rc">Filtro RC Paralelo</span></td>
+                        <td>Capacitor de amortecimento TPS</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 26</span></td>
+                        <td>R2 (10kΩ) ➔ <span class="tag tag-ecu">B_C8</span></td>
+                        <td><span class="tag tag-rc">Filtro RC Série</span></td>
+                        <td>Sinal analógico do MAP (Carga)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-ecu">B_C8</span></td>
+                        <td>C2 (1µF) ➔ <span class="tag tag-gnd">GND</span></td>
+                        <td><span class="tag tag-rc">Filtro RC Paralelo</span></td>
+                        <td>Capacitor de amortecimento MAP</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 27</span></td>
+                        <td>PCM5102 <span class="tag tag-sig">BCK</span></td>
+                        <td>Fio Jumper I2S</td>
+                        <td>Bit Clock da Roda Fônica</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 14</span></td>
+                        <td>PCM5102 <span class="tag tag-sig">LCK</span></td>
+                        <td>Fio Jumper I2S</td>
+                        <td>Word Select (L/R Clock)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 22</span></td>
+                        <td>PCM5102 <span class="tag tag-sig">DIN</span></td>
+                        <td>Fio Jumper I2S</td>
+                        <td>Linha de Dados da Senoide 22-2</td>
+                    </tr>
+                    <tr>
+                        <td>PCM5102 <span class="tag tag-sig">SCK</span></td>
+                        <td><span class="tag tag-gnd">GND</span></td>
+                        <td>Jumper Rígido</td>
+                        <td><strong>OBRIGATÓRIO:</strong> Ativa PLL interno</td>
+                    </tr>
+                    <tr>
+                        <td>PCM5102 <span class="tag tag-sig">XMT</span></td>
+                        <td><span class="tag tag-pwr">ESP32 3V3</span></td>
+                        <td>Jumper Rígido</td>
+                        <td><strong>OBRIGATÓRIO:</strong> Desativa Mute</td>
+                    </tr>
+                    <tr>
+                        <td>PCM5102 <span class="tag tag-sig">FMT, FLT, DMP</span></td>
+                        <td><span class="tag tag-gnd">GND</span></td>
+                        <td>Jumper Rígido</td>
+                        <td>Configuração padrão I2S</td>
+                    </tr>
+                    <tr>
+                        <td>PCM5102 <span class="tag tag-sig">Lout</span></td>
+                        <td>Borne <span class="tag tag-ecu">B_B2</span></td>
+                        <td>Fio Blindado ou Trançado</td>
+                        <td>Sinal CRANK-IN (VR1+) da ECU</td>
+                    </tr>
+                    <tr>
+                        <td>PCM5102 <span class="tag tag-gnd">AGND</span></td>
+                        <td>Borne <span class="tag tag-ecu">B_B3</span></td>
+                        <td>Fio Blindado ou Trançado</td>
+                        <td>Terra VR1- da ECU</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 16</span></td>
+                        <td>Borne <span class="tag tag-ecu">B_A7</span></td>
+                        <td>Fio Direto</td>
+                        <td>Sinal VSS (Velocidade)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-sig">ESP32 GPIO 15</span></td>
+                        <td>Borne <span class="tag tag-ecu">B_B7</span></td>
+                        <td>Fio Direto</td>
+                        <td>Sinal Embreagem (Clutch_in)</td>
+                    </tr>
+                    <tr>
+                        <td>Borne <span class="tag tag-ecu">G_A1</span> (Injeção)</td>
+                        <td>Level Conv. <span class="tag tag-pwr">HV2</span></td>
+                        <td>Retorno 5V</td>
+                        <td>Pulso do bico da Speeduino</td>
+                    </tr>
+                    <tr>
+                        <td>Level Conv. <span class="tag tag-sig">LV2</span></td>
+                        <td><span class="tag tag-sig">ESP32 GPIO 4</span></td>
+                        <td>Retorno 3.3V</td>
+                        <td>Interrupção ISR Medição Injeção</td>
+                    </tr>
+                    <tr>
+                        <td>Borne <span class="tag tag-ecu">G_B1</span> (Ignição)</td>
+                        <td>Level Conv. <span class="tag tag-pwr">HV1</span></td>
+                        <td>Retorno 5V</td>
+                        <td>Pulso da vela da Speeduino</td>
+                    </tr>
+                    <tr>
+                        <td>Level Conv. <span class="tag tag-sig">LV1</span></td>
+                        <td><span class="tag tag-sig">ESP32 GPIO 5</span></td>
+                        <td>Retorno 3.3V</td>
+                        <td>Interrupção ISR Medição Ignição</td>
+                    </tr>
+                    <tr>
+                        <td>Level Conv. <span class="tag tag-pwr">HV</span></td>
+                        <td><span class="tag tag-pwr">ESP32 VIN (5V)</span></td>
+                        <td>Alimentação</td>
+                        <td>Referência de Nível 5V</td>
+                    </tr>
+                    <tr>
+                        <td>Level Conv. <span class="tag tag-pwr">LV</span></td>
+                        <td><span class="tag tag-pwr">ESP32 3V3</span></td>
+                        <td>Alimentação</td>
+                        <td>Referência de Nível 3.3V</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Checklist e Lista de Materiais -->
+        <div class="card">
+            <h2>📦 Lista de Componentes (BOM)</h2>
+            <ul style="color: var(--text-muted); font-size: 13px; margin-left: 18px; margin-bottom: 20px;">
+                <li><strong>1x</strong> Placa de Fenolite Perfurada Ilhada (~7x9 cm ou 9x15 cm, furos 2.54mm)</li>
+                <li><strong>1x</strong> ESP32 DevKit V1 (30 pinos)</li>
+                <li><strong>1x</strong> Módulo DAC I2S GY-PCM5102A (placa roxa)</li>
+                <li><strong>1x</strong> Módulo Conversor de Nível Lógico Bidirecional 4CH (BSS138)</li>
+                <li><strong>2x</strong> Barras de pinos fêmea 1x40 (para cortar os soquetes dos módulos)</li>
+                <li><strong>2x</strong> Resistores de 10 kΩ (1/4W)</li>
+                <li><strong>2x</strong> Capacitores de 1 µF (cerâmico multicamada ou poliéster)</li>
+                <li><strong>1x</strong> Barra de Bornes KRE parafuso ou barra de pinos macho para o chicote</li>
+                <li>Fio de cobre rígido fino (wire wrap ou cabo de rede UTP) para pontes de solda</li>
+            </ul>
+
+            <h2>✅ Checklist de Soldagem</h2>
+            <ul class="checklist">
+                <li><span class="check-box"></span> Soldar os soquetes fêmea de todos os módulos primeiro</li>
+                <li><span class="check-box"></span> Criar os barramentos de 5V e GND com fio de cobre rígido</li>
+                <li><span class="check-box"></span> Soldar R1 (10k) e C1 (1uF) do circuito TPS</li>
+                <li><span class="check-box"></span> Soldar R2 (10k) e C2 (1uF) do circuito MAP</li>
+                <li><span class="check-box"></span> Soldar jumpers SCK->GND e XMT->3V3 no soquete do PCM5102</li>
+                <li><span class="check-box"></span> Ligar as linhas I2S (27, 14, 22) entre ESP32 e PCM5102</li>
+                <li><span class="check-box"></span> Ligar as linhas de retorno (4 e 5) no Level Converter</li>
+                <li><span class="check-box"></span> <strong>TESTE DE CONTINUIDADE COM MULTÍMETRO (sem os módulos encaixados)</strong> para garantir que não há curto entre 5V e GND!</li>
+                <li><span class="check-box"></span> Encaixar os módulos nos soquetes e ligar o USB!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+"""
+
+with open("Circuito_HIL/guia_montagem_fenolite.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("Guia visual HTML da fenolite gerado com sucesso!")

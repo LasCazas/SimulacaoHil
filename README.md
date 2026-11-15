@@ -80,12 +80,21 @@ Para preservar os dois conversores analógicos internos de 8 bits do ESP32 (`GPI
 | **MAP** (Pressão Coletor) | `GPIO 26` | `DAC2` (0–3,3 V) | Filtro RC ($10\text{ k}\Omega + 1\,\mu\text{F}$ p/ `GND`) | `B_C8` (`MAP-EXT`) |
 | **Crank 22-2** (`BCK`) | `GPIO 27` | `I2S BCK` | Pino `BCK` do PCM5102A | `B_B2` (`CRANK-IN`) |
 | **Crank 22-2** (`LCK`) | `GPIO 14` | `I2S WS/LCK` | Pino `LCK` do PCM5102A | *(saída de áudio `L` do PCM5102A)* |
-| **Crank 22-2** (`DIN`) | `GPIO 22` | `I2S DATA` | Pino `DIN` do PCM5102A (`SCK` aterrado no `GND`) | `B_B3` (`VR1-` $\leftarrow$ `GND` PCM5102A) |
-| **VSS** (Velocidade) | `GPIO 16` | `PWM LEDC` | Direto ($0\text{--}3{,}3\text{ V}$, proporcional a $v$) | `B_A7` (`VSS`) |
+| **Crank 22-2** (`DIN`) | `GPIO 22` | `I2S DATA` | Pino `DIN` do PCM5102A | `B_B3` (`VR1-` $\leftarrow$ `GND` PCM5102A) |
+| **Velocidade** (`VSS`) | `GPIO 16` | `PWM LEDC` | Direto ($0\text{--}3{,}3\text{ V}$, proporcional a $v$) | `B_A7` (`VSS`) |
 | **Embreagem** | `GPIO 15` | Saída Digital | Direto ($0\text{--}3{,}3\text{ V}$) | `B_B7` (`Clutch_in`) |
 | **Retorno Bico 1** | `GPIO 4` | `ISR (CHANGE)` | Conversor de Nível Lógico (`Chan2`: `HV` $\rightarrow$ `LV`) | `G_A1` (`INJ-1-OUT`) |
 | **Retorno Bobina 1** | `GPIO 5` | `ISR (RISING)` | Conversor de Nível Lógico (`Chan1`: `HV` $\rightarrow$ `LV`) | `G_B1` (`IGN-1-OUT`) |
 | **Referência Comum** | `GND` | Terra Lógico | Unificar `GND` do ESP32, PCM5102A, Conversor e ECU | `B_A8` (`GND Sensores`) |
+
+### Configuração Obrigatória dos Pinos do Módulo PCM5102A
+Para a placa roxa GY-PCM5102A funcionar sem entrar em mudo e com relógio interno ativo:
+* **`VCC`**: Ligar no pino **`VIN (5V)`** do ESP32.
+* **`GND`**: Ligar no **`GND`** do ESP32.
+* **`SCK` (ou SCL)**: **OBRIGATÓRIO ligar no `GND`** (ativa o PLL interno para gerar o master clock a partir do BCK).
+* **`XMT` (ou XSMT)**: **OBRIGATÓRIO ligar no `3.3V`** (desativa o Soft Mute de fábrica; se ficar solto a placa fica 100% muda).
+* **`FMT`**: Ligar no **`GND`** (seleciona formato I2S padrão).
+* **`FLT` e `DMP`**: Ligar no **`GND`** (filtro normal e sem de-ênfase).
 
 ### Condicionamento sem Bico e sem Bobina Físicos (Level Converter)
 

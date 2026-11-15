@@ -1,0 +1,1695 @@
+(export
+	(version "E")
+	(design
+		(source "C:\\Programacao\\projetos\\RacingTeam\\ecu\\1_SImulacaoHil\\Circuito_HIL\\Circuito_HIL.kicad_sch")
+		(date "2026-11-12T19:27:06")
+		(tool "Eeschema 10.0.8")
+		(sheet
+			(number "1")
+			(name "/")
+			(tstamps "/")
+			(title_block
+				(title "BANCADA HIL - SIMULADOR DINAMICO SPEEDUINO 48-WAY")
+				(company "IF Betim Racing - IFMG Campus Betim")
+				(rev "v2.0")
+				(date "2026-11-12")
+				(source "Circuito_HIL.kicad_sch")
+				(comment
+					(number "1")
+					(value "Interface HIL: ESP32 + PCM5102A + Level Converter + Filtros RC")
+				)
+				(comment
+					(number "2")
+					(value "KTM Duke 390 (22-2) & Speeduino 48-Way")
+				)
+				(comment
+					(number "3")
+					(value "")
+				)
+				(comment
+					(number "4")
+					(value "")
+				)
+				(comment
+					(number "5")
+					(value "")
+				)
+				(comment
+					(number "6")
+					(value "")
+				)
+				(comment
+					(number "7")
+					(value "")
+				)
+				(comment
+					(number "8")
+					(value "")
+				)
+				(comment
+					(number "9")
+					(value "")
+				)
+			)
+		)
+	)
+	(components
+		(comp
+			(ref "C1")
+			(value "1uF (TPS)")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b1c2d3e4-0002-0000-0000-000000000002")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "C2")
+			(value "1uF (MAP)")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "C")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b1c2d3e4-0004-0000-0000-000000000004")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "J1")
+			(value "CHICOTE_SPEEDUINO_48WAY")
+			(footprint "Connector_TerminalBlock:TerminalBlock_bornier-9_P5.08mm")
+			(fields
+				(field
+					(name "Footprint") "Connector_TerminalBlock:TerminalBlock_bornier-9_P5.08mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "HIL")
+				(part "Conn_Speeduino_Chicote")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a1b2c3d4-0004-0000-0000-000000000004")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R1")
+			(value "10k (TPS)")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b1c2d3e4-0001-0000-0000-000000000001")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "R2")
+			(value "10k (MAP)")
+			(fields
+				(field
+					(name "Footprint")
+				)
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "Device")
+				(part "R")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "b1c2d3e4-0003-0000-0000-000000000003")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U1")
+			(value "ESP32_DevKit_V1")
+			(footprint "Module:ESP32_DevKit_V1_30Pin")
+			(fields
+				(field
+					(name "Footprint") "Module:ESP32_DevKit_V1_30Pin")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "HIL")
+				(part "ESP32_DevKit_V1_30Pin")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a1b2c3d4-0001-0000-0000-000000000001")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+						(pin
+							(num "14")
+						)
+						(pin
+							(num "15")
+						)
+						(pin
+							(num "30")
+						)
+						(pin
+							(num "29")
+						)
+						(pin
+							(num "28")
+						)
+						(pin
+							(num "27")
+						)
+						(pin
+							(num "26")
+						)
+						(pin
+							(num "25")
+						)
+						(pin
+							(num "24")
+						)
+						(pin
+							(num "23")
+						)
+						(pin
+							(num "22")
+						)
+						(pin
+							(num "21")
+						)
+						(pin
+							(num "20")
+						)
+						(pin
+							(num "19")
+						)
+						(pin
+							(num "18")
+						)
+						(pin
+							(num "17")
+						)
+						(pin
+							(num "16")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U2")
+			(value "GY-PCM5102A")
+			(footprint "Module:PCM5102A_Module")
+			(fields
+				(field
+					(name "Footprint") "Module:PCM5102A_Module")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "HIL")
+				(part "PCM5102A_Module")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a1b2c3d4-0002-0000-0000-000000000002")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+						(pin
+							(num "13")
+						)
+					)
+				)
+			)
+		)
+		(comp
+			(ref "U3")
+			(value "Level_Converter_4CH")
+			(footprint "Module:Level_Converter_4CH")
+			(fields
+				(field
+					(name "Footprint") "Module:Level_Converter_4CH")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(libsource
+				(lib "HIL")
+				(part "Logic_Level_Converter_4CH")
+				(description "")
+			)
+			(property
+				(name "Sheetname")
+				(value "Circuito_HIL")
+			)
+			(property
+				(name "Sheetfile")
+				(value "Circuito_HIL.kicad_sch")
+			)
+			(sheetpath
+				(names "/")
+				(tstamps "/")
+			)
+			(tstamps "a1b2c3d4-0003-0000-0000-000000000003")
+			(units
+				(unit
+					(name "A")
+					(pins
+						(pin
+							(num "1")
+						)
+						(pin
+							(num "2")
+						)
+						(pin
+							(num "3")
+						)
+						(pin
+							(num "4")
+						)
+						(pin
+							(num "5")
+						)
+						(pin
+							(num "6")
+						)
+						(pin
+							(num "7")
+						)
+						(pin
+							(num "8")
+						)
+						(pin
+							(num "9")
+						)
+						(pin
+							(num "10")
+						)
+						(pin
+							(num "11")
+						)
+						(pin
+							(num "12")
+						)
+					)
+				)
+			)
+		)
+	)
+	(groups)
+	(variants)
+	(libparts
+		(libpart
+			(lib "Device")
+			(part "C")
+			(fields
+				(field
+					(name "Reference") "C")
+				(field
+					(name "Value") "C")
+				(field
+					(name "Footprint") "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P2.50mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "Device")
+			(part "R")
+			(fields
+				(field
+					(name "Reference") "R")
+				(field
+					(name "Value") "R")
+				(field
+					(name "Footprint") "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "HIL")
+			(part "Conn_Speeduino_Chicote")
+			(fields
+				(field
+					(name "Reference") "J1")
+				(field
+					(name "Value") "CHICOTE_SPEEDUINO_48WAY")
+				(field
+					(name "Footprint") "Connector_TerminalBlock:TerminalBlock_bornier-9_P5.08mm")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "B_B2_(CRANK+_/_VR1+)")
+					(type "input")
+				)
+				(pin
+					(num "2")
+					(name "B_B3_(VR1-_/_Terra_VR)")
+					(type "passive")
+				)
+				(pin
+					(num "3")
+					(name "B_C7_(TPS_Sensor)")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "B_C8_(MAP-EXT)")
+					(type "input")
+				)
+				(pin
+					(num "5")
+					(name "B_A7_(VSS_/_Velocidade)")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "B_B7_(Clutch_in)")
+					(type "input")
+				)
+				(pin
+					(num "7")
+					(name "G_A1_(INJ-1-OUT)")
+					(type "output")
+				)
+				(pin
+					(num "8")
+					(name "G_B1_(IGN-1-OUT)")
+					(type "output")
+				)
+				(pin
+					(num "9")
+					(name "B_A8_(GND_Sensores)")
+					(type "power_in")
+				)
+			)
+		)
+		(libpart
+			(lib "HIL")
+			(part "ESP32_DevKit_V1_30Pin")
+			(fields
+				(field
+					(name "Reference") "U1")
+				(field
+					(name "Value") "ESP32_DevKit_V1")
+				(field
+					(name "Footprint") "Module:ESP32_DevKit_V1_30Pin")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "EN")
+					(type "passive")
+				)
+				(pin
+					(num "2")
+					(name "VP_(D36)")
+					(type "input")
+				)
+				(pin
+					(num "3")
+					(name "VN_(D39)")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "D34")
+					(type "input")
+				)
+				(pin
+					(num "5")
+					(name "D35")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "D32")
+					(type "bidirectional")
+				)
+				(pin
+					(num "7")
+					(name "D33")
+					(type "bidirectional")
+				)
+				(pin
+					(num "8")
+					(name "D25_(DAC_TPS)")
+					(type "output")
+				)
+				(pin
+					(num "9")
+					(name "D26_(DAC_MAP)")
+					(type "output")
+				)
+				(pin
+					(num "10")
+					(name "D27_(I2S_BCK)")
+					(type "output")
+				)
+				(pin
+					(num "11")
+					(name "D14_(I2S_LCK)")
+					(type "output")
+				)
+				(pin
+					(num "12")
+					(name "D12")
+					(type "bidirectional")
+				)
+				(pin
+					(num "13")
+					(name "D13")
+					(type "bidirectional")
+				)
+				(pin
+					(num "14")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "15")
+					(name "VIN_(5V)")
+					(type "power_in")
+				)
+				(pin
+					(num "16")
+					(name "3V3")
+					(type "power_out")
+				)
+				(pin
+					(num "17")
+					(name "D15_(CLUTCH)")
+					(type "output")
+				)
+				(pin
+					(num "18")
+					(name "D2")
+					(type "bidirectional")
+				)
+				(pin
+					(num "19")
+					(name "D0")
+					(type "bidirectional")
+				)
+				(pin
+					(num "20")
+					(name "D4_(INJ_FB)")
+					(type "input")
+				)
+				(pin
+					(num "21")
+					(name "D16_(VSS)")
+					(type "output")
+				)
+				(pin
+					(num "22")
+					(name "D17")
+					(type "bidirectional")
+				)
+				(pin
+					(num "23")
+					(name "D5_(IGN_FB)")
+					(type "input")
+				)
+				(pin
+					(num "24")
+					(name "D18")
+					(type "bidirectional")
+				)
+				(pin
+					(num "25")
+					(name "D19")
+					(type "bidirectional")
+				)
+				(pin
+					(num "26")
+					(name "D21")
+					(type "bidirectional")
+				)
+				(pin
+					(num "27")
+					(name "RX0_(D3)")
+					(type "bidirectional")
+				)
+				(pin
+					(num "28")
+					(name "TX0_(D1)")
+					(type "bidirectional")
+				)
+				(pin
+					(num "29")
+					(name "D22_(I2S_DIN)")
+					(type "output")
+				)
+				(pin
+					(num "30")
+					(name "D23")
+					(type "bidirectional")
+				)
+			)
+		)
+		(libpart
+			(lib "HIL")
+			(part "Logic_Level_Converter_4CH")
+			(fields
+				(field
+					(name "Reference") "U3")
+				(field
+					(name "Value") "Level_Converter_4CH")
+				(field
+					(name "Footprint") "Module:Level_Converter_4CH")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "HV_(5V)")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "GND_(HV)")
+					(type "power_in")
+				)
+				(pin
+					(num "3")
+					(name "HV1_(IGN)")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "HV2_(INJ)")
+					(type "input")
+				)
+				(pin
+					(num "5")
+					(name "HV3_(NC)")
+					(type "passive")
+				)
+				(pin
+					(num "6")
+					(name "HV4_(NC)")
+					(type "passive")
+				)
+				(pin
+					(num "7")
+					(name "LV_(3V3)")
+					(type "power_in")
+				)
+				(pin
+					(num "8")
+					(name "GND_(LV)")
+					(type "power_in")
+				)
+				(pin
+					(num "9")
+					(name "LV1_(->_D5)")
+					(type "output")
+				)
+				(pin
+					(num "10")
+					(name "LV2_(->_D4)")
+					(type "output")
+				)
+				(pin
+					(num "11")
+					(name "LV3_(NC)")
+					(type "passive")
+				)
+				(pin
+					(num "12")
+					(name "LV4_(NC)")
+					(type "passive")
+				)
+			)
+		)
+		(libpart
+			(lib "HIL")
+			(part "PCM5102A_Module")
+			(fields
+				(field
+					(name "Reference") "U2")
+				(field
+					(name "Value") "GY-PCM5102A")
+				(field
+					(name "Footprint") "Module:PCM5102A_Module")
+				(field
+					(name "Datasheet")
+				)
+				(field
+					(name "Description")
+				)
+			)
+			(pins
+				(pin
+					(num "1")
+					(name "VCC")
+					(type "power_in")
+				)
+				(pin
+					(num "2")
+					(name "GND")
+					(type "power_in")
+				)
+				(pin
+					(num "3")
+					(name "BCK")
+					(type "input")
+				)
+				(pin
+					(num "4")
+					(name "DIN")
+					(type "input")
+				)
+				(pin
+					(num "5")
+					(name "LCK")
+					(type "input")
+				)
+				(pin
+					(num "6")
+					(name "SCK")
+					(type "input")
+				)
+				(pin
+					(num "7")
+					(name "XMT")
+					(type "input")
+				)
+				(pin
+					(num "8")
+					(name "FMT")
+					(type "input")
+				)
+				(pin
+					(num "9")
+					(name "FLT")
+					(type "input")
+				)
+				(pin
+					(num "10")
+					(name "DMP")
+					(type "input")
+				)
+				(pin
+					(num "11")
+					(name "LOUT_(VR1+)")
+					(type "output")
+				)
+				(pin
+					(num "12")
+					(name "AGND_(VR1-)")
+					(type "passive")
+				)
+				(pin
+					(num "13")
+					(name "ROUT_(NC)")
+					(type "output")
+				)
+			)
+		)
+	)
+	(libraries
+		(library
+			(logical "Device")
+			(uri "${KICAD10_SYMBOL_DIR}/Device.kicad_sym")
+		)
+	)
+	(nets
+		(net
+			(code "1")
+			(name "+3V3")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "16")
+				(pinfunction "3V3_16")
+				(pintype "power_out")
+			)
+			(node
+				(ref "U2")
+				(pin "7")
+				(pinfunction "XMT_7")
+				(pintype "input")
+			)
+			(node
+				(ref "U3")
+				(pin "7")
+				(pinfunction "LV_(3V3)_7")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "2")
+			(name "+5V")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "15")
+				(pinfunction "VIN_(5V)_15")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "1")
+				(pinfunction "VCC_1")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "1")
+				(pinfunction "HV_(5V)_1")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "3")
+			(name "/CLUTCH_SIG")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "6")
+				(pinfunction "B_B7_(Clutch_in)_6")
+				(pintype "input")
+			)
+			(node
+				(ref "U1")
+				(pin "17")
+				(pinfunction "D15_(CLUTCH)_17")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "4")
+			(name "/CRANK_VR_NEG")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "2")
+				(pinfunction "B_B3_(VR1-_/_Terra_VR)_2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U2")
+				(pin "12")
+				(pinfunction "AGND_(VR1-)_12")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "5")
+			(name "/CRANK_VR_POS")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "1")
+				(pinfunction "B_B2_(CRANK+_/_VR1+)_1")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "11")
+				(pinfunction "LOUT_(VR1+)_11")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "6")
+			(name "/FB_IGN_3V3")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "23")
+				(pinfunction "D5_(IGN_FB)_23")
+				(pintype "input")
+			)
+			(node
+				(ref "U3")
+				(pin "9")
+				(pinfunction "LV1_(->_D5)_9")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "7")
+			(name "/FB_INJ_3V3")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "20")
+				(pinfunction "D4_(INJ_FB)_20")
+				(pintype "input")
+			)
+			(node
+				(ref "U3")
+				(pin "10")
+				(pinfunction "LV2_(->_D4)_10")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "8")
+			(name "/I2S_BCK")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "10")
+				(pinfunction "D27_(I2S_BCK)_10")
+				(pintype "output")
+			)
+			(node
+				(ref "U2")
+				(pin "3")
+				(pinfunction "BCK_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "9")
+			(name "/I2S_DIN")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "29")
+				(pinfunction "D22_(I2S_DIN)_29")
+				(pintype "output")
+			)
+			(node
+				(ref "U2")
+				(pin "4")
+				(pinfunction "DIN_4")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "10")
+			(name "/I2S_LCK")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "11")
+				(pinfunction "D14_(I2S_LCK)_11")
+				(pintype "output")
+			)
+			(node
+				(ref "U2")
+				(pin "5")
+				(pinfunction "LCK_5")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "11")
+			(name "/NET_MAP_OUT")
+			(class "Default")
+			(node
+				(ref "C2")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "4")
+				(pinfunction "B_C8_(MAP-EXT)_4")
+				(pintype "input")
+			)
+			(node
+				(ref "R2")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "12")
+			(name "/NET_TPS_OUT")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "1")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "3")
+				(pinfunction "B_C7_(TPS_Sensor)_3")
+				(pintype "input")
+			)
+			(node
+				(ref "R1")
+				(pin "1")
+				(pintype "passive")
+			)
+		)
+		(net
+			(code "13")
+			(name "/SPEEDUINO_IGN")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "8")
+				(pinfunction "G_B1_(IGN-1-OUT)_8")
+				(pintype "output")
+			)
+			(node
+				(ref "U3")
+				(pin "3")
+				(pinfunction "HV1_(IGN)_3")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "14")
+			(name "/SPEEDUINO_INJ")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "7")
+				(pinfunction "G_A1_(INJ-1-OUT)_7")
+				(pintype "output")
+			)
+			(node
+				(ref "U3")
+				(pin "4")
+				(pinfunction "HV2_(INJ)_4")
+				(pintype "input")
+			)
+		)
+		(net
+			(code "15")
+			(name "/VSS_PULSE")
+			(class "Default")
+			(node
+				(ref "J1")
+				(pin "5")
+				(pinfunction "B_A7_(VSS_/_Velocidade)_5")
+				(pintype "input")
+			)
+			(node
+				(ref "U1")
+				(pin "21")
+				(pinfunction "D16_(VSS)_21")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "16")
+			(name "GND")
+			(class "Default")
+			(node
+				(ref "C1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "C2")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "J1")
+				(pin "9")
+				(pinfunction "B_A8_(GND_Sensores)_9")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U1")
+				(pin "14")
+				(pinfunction "GND_14")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "10")
+				(pinfunction "DMP_10")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "2")
+				(pinfunction "GND_2")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U2")
+				(pin "6")
+				(pinfunction "SCK_6")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "8")
+				(pinfunction "FMT_8")
+				(pintype "input")
+			)
+			(node
+				(ref "U2")
+				(pin "9")
+				(pinfunction "FLT_9")
+				(pintype "input")
+			)
+			(node
+				(ref "U3")
+				(pin "2")
+				(pinfunction "GND_(HV)_2")
+				(pintype "power_in")
+			)
+			(node
+				(ref "U3")
+				(pin "8")
+				(pinfunction "GND_(LV)_8")
+				(pintype "power_in")
+			)
+		)
+		(net
+			(code "17")
+			(name "Net-(U1-D25_(DAC_TPS))")
+			(class "Default")
+			(node
+				(ref "R1")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "8")
+				(pinfunction "D25_(DAC_TPS)_8")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "18")
+			(name "Net-(U1-D26_(DAC_MAP))")
+			(class "Default")
+			(node
+				(ref "R2")
+				(pin "2")
+				(pintype "passive")
+			)
+			(node
+				(ref "U1")
+				(pin "9")
+				(pinfunction "D26_(DAC_MAP)_9")
+				(pintype "output")
+			)
+		)
+		(net
+			(code "19")
+			(name "unconnected-(U1-D0-Pad19)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "19")
+				(pinfunction "D0_19")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "20")
+			(name "unconnected-(U1-D2-Pad18)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "18")
+				(pinfunction "D2_18")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "21")
+			(name "unconnected-(U1-D12-Pad12)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "12")
+				(pinfunction "D12_12")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "22")
+			(name "unconnected-(U1-D13-Pad13)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "13")
+				(pinfunction "D13_13")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "23")
+			(name "unconnected-(U1-D17-Pad22)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "22")
+				(pinfunction "D17_22")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "24")
+			(name "unconnected-(U1-D18-Pad24)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "24")
+				(pinfunction "D18_24")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "25")
+			(name "unconnected-(U1-D19-Pad25)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "25")
+				(pinfunction "D19_25")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "26")
+			(name "unconnected-(U1-D21-Pad26)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "26")
+				(pinfunction "D21_26")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "27")
+			(name "unconnected-(U1-D23-Pad30)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "30")
+				(pinfunction "D23_30")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "28")
+			(name "unconnected-(U1-D32-Pad6)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "6")
+				(pinfunction "D32_6")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "29")
+			(name "unconnected-(U1-D33-Pad7)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "7")
+				(pinfunction "D33_7")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "30")
+			(name "unconnected-(U1-D34-Pad4)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "4")
+				(pinfunction "D34_4")
+				(pintype "input+no_connect")
+			)
+		)
+		(net
+			(code "31")
+			(name "unconnected-(U1-D35-Pad5)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "5")
+				(pinfunction "D35_5")
+				(pintype "input+no_connect")
+			)
+		)
+		(net
+			(code "32")
+			(name "unconnected-(U1-EN-Pad1)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "1")
+				(pinfunction "EN_1")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "33")
+			(name "unconnected-(U1-RX0_(D3)-Pad27)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "27")
+				(pinfunction "RX0_(D3)_27")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "34")
+			(name "unconnected-(U1-TX0_(D1)-Pad28)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "28")
+				(pinfunction "TX0_(D1)_28")
+				(pintype "bidirectional+no_connect")
+			)
+		)
+		(net
+			(code "35")
+			(name "unconnected-(U1-VN_(D39)-Pad3)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "3")
+				(pinfunction "VN_(D39)_3")
+				(pintype "input+no_connect")
+			)
+		)
+		(net
+			(code "36")
+			(name "unconnected-(U1-VP_(D36)-Pad2)")
+			(class "Default")
+			(node
+				(ref "U1")
+				(pin "2")
+				(pinfunction "VP_(D36)_2")
+				(pintype "input+no_connect")
+			)
+		)
+		(net
+			(code "37")
+			(name "unconnected-(U2-ROUT_(NC)-Pad13)")
+			(class "Default")
+			(node
+				(ref "U2")
+				(pin "13")
+				(pinfunction "ROUT_(NC)_13")
+				(pintype "output+no_connect")
+			)
+		)
+		(net
+			(code "38")
+			(name "unconnected-(U3-HV3_(NC)-Pad5)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "5")
+				(pinfunction "HV3_(NC)_5")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "39")
+			(name "unconnected-(U3-HV4_(NC)-Pad6)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "6")
+				(pinfunction "HV4_(NC)_6")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "40")
+			(name "unconnected-(U3-LV3_(NC)-Pad11)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "11")
+				(pinfunction "LV3_(NC)_11")
+				(pintype "passive+no_connect")
+			)
+		)
+		(net
+			(code "41")
+			(name "unconnected-(U3-LV4_(NC)-Pad12)")
+			(class "Default")
+			(node
+				(ref "U3")
+				(pin "12")
+				(pinfunction "LV4_(NC)_12")
+				(pintype "passive+no_connect")
+			)
+		)
+	)
+)

@@ -109,7 +109,7 @@ void setupI2S() {
   cfg.mode = (i2s_mode_t)(I2S_MODE_MASTER | I2S_MODE_TX);
   cfg.sample_rate = SAMPLE_RATE;
   cfg.bits_per_sample = I2S_BITS_PER_SAMPLE_16BIT;
-  cfg.channel_format = I2S_CHANNEL_FMT_ONLY_LEFT;
+  cfg.channel_format = I2S_CHANNEL_FMT_RIGHT_LEFT; // Estereo (L e R) para tocar nos dois lados do fone
   cfg.communication_format = I2S_COMM_FORMAT_STAND_I2S;
   cfg.intr_alloc_flags = ESP_INTR_FLAG_LEVEL1;
   cfg.dma_buf_count = 8;
@@ -285,19 +285,20 @@ void loop() {
   // ---- Roda fonica 22-2 (codigo base) ----
   float rpm = omega_e * 60.0f / TWO_PI;
   float angle_increment = (360.0 * (rpm / 60.0)) / (float)SAMPLE_RATE;
-  int16_t sample_buffer[BUFFER_SIZE];
+  int16_t sample_buffer[BUFFER_SIZE * 2]; // Estereo (L + R)
   size_t bytes_written;
   for (int i = 0; i < BUFFER_SIZE; i++) {
     crank_angle += angle_increment;
     if (crank_angle >= 360.0) crank_angle -= 360.0;
     int tooth = (int)(crank_angle / DEGREES_PER_TOOTH);
-    if (tooth >= PRESENT_TEETH) {
-      sample_buffer[i] = 0;
-    } else {
+    int16_t val = 0;
+    if (tooth < PRESENT_TEETH) {
       float tooth_angle = crank_angle - (tooth * DEGREES_PER_TOOTH);
       float phase = (tooth_angle / DEGREES_PER_TOOTH) * TWO_PI;
-      sample_buffer[i] = (int16_t)(sin(phase) * CRANK_AMPLITUDE * 32767.0);
+      val = (int16_t)(sin(phase) * CRANK_AMPLITUDE * 32767.0);
     }
+    sample_buffer[i * 2]     = val; // Canal L (Esquerdo)
+    sample_buffer[i * 2 + 1] = val; // Canal R (Direito)
   }
   i2s_write(I2S_PORT, sample_buffer, sizeof(sample_buffer), &bytes_written, portMAX_DELAY);
 }

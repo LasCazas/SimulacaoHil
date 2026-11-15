@@ -18,6 +18,7 @@ import serial.tools.list_ports
 from PIL import Image, ImageTk
 
 from berrador_audio import EngineAudioPlayer
+from ecu_map_viewer import ECUMapWindow
 
 # ---- Mapeamento padrao do G29 no Logitech G HUB ----
 DEFAULT_AXES = {"volante": 0, "acelerador": 1, "freio": 2, "embreagem": 3}
@@ -89,8 +90,13 @@ class App(tk.Tk):
         self.local_rpm = 1400.0
         self.local_vel_kmh = 0.0
         self.esp_rpm = 0
+        self.esp_inj_us = 2400
+        self.esp_ign_age = 0
+        self.esp_map_kpa = 38.0
+        self.esp_fb_ok = False
         self.esp_last_rx = 0.0
         self.shift_blink = False
+        self.map_window = None
 
         self.cfg = self._load_cfg()
         self.mode_var = tk.StringVar(value=self.cfg.get("mode", "g29"))
@@ -483,6 +489,17 @@ class App(tk.Tk):
         ttk.Button(bottom, text="Reenviar parâmetros (moto_duke390.json)", command=self._queue_params).pack(
             side="right"
         )
+        ttk.Button(bottom, text="🗺️ Visualizar Mapas da ECU", command=self._open_map_window).pack(
+            side="right", padx=(0, 6)
+        )
+
+    def _open_map_window(self):
+        """Abre ou traz para frente a janela dos mapas 2D de telemetria da ECU."""
+        if self.map_window is not None and self.map_window.winfo_exists():
+            self.map_window.lift()
+            self.map_window.focus_force()
+        else:
+            self.map_window = ECUMapWindow(self)
 
     # ---------- Desenho do Volante, Pedais F1 e Shift Light ----------
     def _render_wheel(self, steer_deg):
@@ -708,6 +725,11 @@ class App(tk.Tk):
                 self.ser.close()
             except Exception:
                 pass
+        if getattr(self, "map_window", None) is not None and self.map_window.winfo_exists():
+            try:
+                self.map_window.destroy()
+            except Exception:
+                pass
         self.destroy()
 
     def _queue_params(self):
@@ -871,6 +893,28 @@ class App(tk.Tk):
         self._draw_shift_lights(active_rpm)
         self.audio.update_state(active_rpm, thr)
 
+        # Alimenta a janela de mapas da ECU caso esteja aberta
+        if getattr(self, "map_window", None) is not None and self.map_window.winfo_exists():
+            if esp_live:
+                self.map_window.feed_telemetry(
+                    rpm=self.esp_rpm,
+                    map_kpa=getattr(self, "esp_map_kpa", 38.0),
+                    inj_us=getattr(self, "esp_inj_us", 2400),
+                    ign_deg_or_age=getattr(self, "esp_ign_age", 12.0),
+                    is_hw_live=True,
+                )
+            else:
+                sim_map = 35.0 + 66.0 * thr
+                sim_inj = 1800.0 + 6200.0 * thr * (active_rpm / 10000.0)
+                sim_ign = 10.0 + 18.0 * (active_rpm / 10500.0) - 5.0 * thr
+                self.map_window.feed_telemetry(
+                    rpm=active_rpm,
+                    map_kpa=sim_map,
+                    inj_us=sim_inj,
+                    ign_deg_or_age=sim_ign,
+                    is_hw_live=False,
+                )
+
         self.after(int(1000 / SEND_HZ), self._tick)
 
     def _read_serial(self):
@@ -884,6 +928,10 @@ class App(tk.Tk):
             if len(p) == 10 and all(x.lstrip("-").isdigit() for x in p):
                 r, v, i, g, gr, kmh, tq, mp, ff, fb = map(int, p)
                 self.esp_rpm = r
+                self.esp_inj_us = i
+                self.esp_ign_age = g
+                self.esp_map_kpa = mp / 10.0
+                self.esp_fb_ok = bool(fb)
                 self.esp_last_rx = time.time()
                 self.lbl_rpm.config(text=f"{r} RPM", fg="#ff5252" if r >= 9800 else "#ffffff")
                 self.lbl_kmh.config(text=f"{kmh/10:5.1f} km/h")
